@@ -1,0 +1,2 @@
+# JATYeCommerce
+JATY is an e-commerce storefront where individuals can sign up to view and sell products with other users across the globe. JATY allows users to list their products to sell at prices of their choice while offering various other customization options, such as product pictures, custom descriptions, and much more! JATY also provides the functionality of managers, who can prevent dangerous or unwanted products from being sold on the app.
