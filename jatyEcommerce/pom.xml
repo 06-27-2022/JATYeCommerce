@@ -5,7 +5,28 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies>
+	<!-- The Spring Core module is the most basic building block of Spring 
+		framework as dependency injection and IoC features are not possible without 
+		it. -->
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>5.3.22</version>
+	</dependency>
+	<!-- Please make sure that you're using consistent versions of your modules 
+		across the board as using different versions of modules together can lead 
+		to issues. Spring Context provides access to configure contexts (e.g. ApplicationContent, 
+		which is the current IoC container in Spring. -->
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>5.3.22</version>
+	</dependency>
+  </dependencies>
 </project>
