@@ -34,6 +34,14 @@ public class jatyAccount {
 	 *             this account can flag products for bans.
 	 */
 	private String role;
+	/**
+	 * The city the owner of the account sends their stock from.
+	 */
+	private String city;
+	/**
+	 * The state the owner of the account sends their stock from.
+	 */
+	private String state;
 	
 	//constructors for jatyAccount
 	
@@ -47,12 +55,16 @@ public class jatyAccount {
 	 * @param username
 	 * @param password
 	 * @param role
+	 * @param city
+	 * @param state
 	 */
-	public jatyAccount(int id, String username, String password, String role) {
+	public jatyAccount(int id, String username, String password, String role, String city, String state) {
 		this.id=id;
 		this.username=username;
 		this.password=password;
 		this.role=role;
+		this.city =  city;
+		this.state = state;
 	}
 	
 	/**
@@ -91,6 +103,22 @@ public class jatyAccount {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 }
