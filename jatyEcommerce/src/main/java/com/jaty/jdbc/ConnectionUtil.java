@@ -50,7 +50,8 @@ public class ConnectionUtil {
 	 * db_username
 	 * <br>
 	 * db_password
-	 * @return
+	 * @return DriverManager.getConnection() 
+	 * using the 3 environment variables as input for the constructor
 	 */
 	public static Connection getConnection() {
 		try {
@@ -63,7 +64,6 @@ public class ConnectionUtil {
 	/**
 	 * close provided resources
 	 * @param conn Connection object received from getConnection()
-	 * @return true if connection successfully closed;
 	 */
 	public static void closeConnection(Connection conn) {
 		try{
@@ -76,7 +76,6 @@ public class ConnectionUtil {
 	 * close provided resources
 	 * @param conn Connection object received from getConnection()
 	 * @param stmt Statement objects such as Statement and PreparedStatement
-	 * @return true if closed successfully
 	 */
 	public static void closeConnection(Connection conn,Statement stmt) {
 		try{
@@ -92,7 +91,6 @@ public class ConnectionUtil {
 	 * @param conn Connection object received from getConnection()
 	 * @param stmt Statement objects such as Statement and PreparedStatement
 	 * @param set ResultSet object. Tends to throw exceptions if something goes wrong with Statement.
-	 * @return true if closed successfully
 	 */
 	public static void closeConnection(Connection conn,Statement stmt,ResultSet set) {
 		try{
@@ -104,40 +102,9 @@ public class ConnectionUtil {
 		}
 	}
 	/**
-	 * simply executes the statement given
-	 * @param SQL String used in prepareStatement()
-	 * @return returns true if the statement executed
-	 */
-//	public static boolean stmtExecute(String SQL) {
-//		Connection conn=getConnection();
-//		PreparedStatement stmt=null;
-//		boolean success = false;
-//		try{
-//			stmt=conn.prepareStatement(SQL);			
-//			stmt.execute();
-//			success = true;
-//		}catch(SQLException e){
-//			e.printStackTrace();
-//		}finally {
-//			closeConnection(conn,stmt);			
-//		}
-//		return success;
-//	}
-
-	/**
-	 * executes a prepared statement
-	 * @param SQL string used for the prepareStatement() function
-	 * @param args object used for stmt.set____(), see setStatement() for more info
-	 * @return returns true if no SQLExceptions occurred and the statement executed
-	 */
-//	public static boolean stmtExecute(String SQL,Object args) {
-//		return stmtExecute(SQL,new Object[] {args});
-//	}
-	/**
 	 * executes a prepared statement
 	 * @param SQL string used for the prepareStatement() function
 	 * @param args list of objects used for stmt.set____(), see setStatement() for more info
-	 * @return returns true if no SQLExceptions occurred and the statement executed
 	 */
 	public static void stmtExecute(String SQL,Object...args) {
 		Connection conn = getConnection();
@@ -154,35 +121,36 @@ public class ConnectionUtil {
 		}
 	}
 		
-		/**
-		 * automatically selects the correct datatype for stmt.set___() 
-		 * supports int, double, char, string, boolean
-		 * chars will be submitted as a string
-		 * resultset causes exceptions when closing when trying to manually choose the type of set
-		 * only uses stmt.setObject for now
-		 * @param stmt The ProtectedStatement object you are trying to set
-		 * @param i The parameterindex for stmt
-		 * @param o	The object being set into stmt
-		 * @throws SQLException
-		 */
-		private static void setStatement(PreparedStatement stmt,int i,Object o) throws SQLException {		
-			if(o==null)
-				stmt.setNull(i, Types.NULL);
-			else if(o.getClass().equals(File.class)) {
-				File f = (File)o;
-				try{
-					stmt.setBinaryStream(i,new FileInputStream(f),f.length());				
-				}catch(FileNotFoundException e) {
-					e.printStackTrace();
-				}
+	/**
+	 * automatically selects the correct datatype for stmt.set___() 
+	 * supports int, double, char, string, boolean
+	 * chars will be submitted as a string
+	 * resultset causes exceptions when closing when trying to manually choose the type of set
+	 * only uses stmt.setObject for now
+	 * @param stmt The ProtectedStatement object you are trying to set
+	 * @param i The parameterindex for stmt
+	 * @param o	The object being set into stmt
+	 * @throws SQLException
+	 */
+	private static void setStatement(PreparedStatement stmt,int i,Object o) throws SQLException {		
+		if(o==null)
+			stmt.setNull(i, Types.NULL);
+		else if(o.getClass().equals(File.class)) {
+			File f = (File)o;
+			try{
+				stmt.setBinaryStream(i,new FileInputStream(f),f.length());				
+			}catch(FileNotFoundException e) {
+				e.printStackTrace();
 			}
-			else
-				stmt.setObject(i, o);
 		}
+		else
+			stmt.setObject(i, o);
+	}
 		
 	/**
 	 * Runs a resultSet.
 	 * @param SQL used for a preparedstatement
+	 * @param args arguments for the preparedstatement
 	 * @return returns an object from stmtExecute2d(SQL,args)[0][0]
 	 */	
 	public static Object stmtExecuteQuery(String SQL, Object...args) {
@@ -195,7 +163,7 @@ public class ConnectionUtil {
 	/**
 	 * Runs a resultSet.
 	 * @param SQL used for a preparedstatement
-	 * @param args	arguments for the preparedstatement
+	 * @param args arguments for the preparedstatement
 	 * @return returns an object from stmtExecute2d(SQL,args)[0]
 	 */	
 	public static Object[]stmtExecuteQuery1D(String SQL, Object...args) {
@@ -209,7 +177,7 @@ public class ConnectionUtil {
 	/**
 	 * Runs a resultSet.
 	 * @param SQL used for a preparedstatement
-	 * @param args	arguments for the preparedstatement
+	 * @param args arguments for the preparedstatement
 	 * @return returns a 2d object array obj[rows][columns]
 	 */
 	public static Object[][] stmtExecuteQuery2D(String SQL,Object...args) {

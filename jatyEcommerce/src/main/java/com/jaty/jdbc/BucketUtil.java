@@ -44,7 +44,7 @@ import com.jaty.log.LogUtil;
 public class BucketUtil {
 	
     public final static AmazonS3 s3 = getAmazonS3();
-//    private final static Logger log = getLogger();
+    private final static Logger log = getLogger();
     
     /**
      * You may want to consider expanding this in the future to read things other than environment variables in case they do not exist
@@ -94,15 +94,16 @@ public class BucketUtil {
     public static Bucket createBucket(String bucket_name) {
         Bucket b = null;
         if (s3.doesBucketExistV2(bucket_name)) {
-//    		log.trace("Bucket "+bucket_name+" already exists.\n");
+    		log.trace("Bucket "+bucket_name+" already exists.\n");
 
             b = getBucket(bucket_name);
         } else {
             try {
-//            	log.trace("Bucket "+ bucket_name+" now exists.\n");
+            	log.trace("Bucket "+ bucket_name+" now exists.\n");
                 b = s3.createBucket(bucket_name);
             } catch (AmazonS3Exception e) {
-//            	log.trace(e.getErrorMessage());
+            	e.printStackTrace();
+            	log.trace(e.getErrorMessage());
             }
         }
         return b;
@@ -113,9 +114,9 @@ public class BucketUtil {
      * @param bucket_name name of the bucket being deleted
      */
     public static void deleteBucket(String bucket_name) {
-//    	log.trace("Deleting S3 bucket: " + bucket_name);
+    	log.trace("Deleting S3 bucket: " + bucket_name);
         try {
-//        	log.trace(" - removing objects from bucket");
+        	log.trace(" - removing objects from bucket");
             ObjectListing object_listing = s3.listObjects(bucket_name);
             while (true) {
                 for (Iterator<?> iterator =
@@ -133,7 +134,7 @@ public class BucketUtil {
                 }
             }
 
-//            log.trace(" - removing versions from bucket");
+            log.trace(" - removing versions from bucket");
     		VersionListing version_listing = s3.listVersions(
                     new ListVersionsRequest().withBucketName(bucket_name));
             while (true) {
@@ -153,12 +154,13 @@ public class BucketUtil {
                 }
             }
 
-//            log.trace(" OK, bucket ready to delete!");
+            log.trace(" OK, bucket ready to delete!");
             s3.deleteBucket(bucket_name);
         } catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
+            log.trace(e.getErrorMessage());
         }
-//        log.trace("Done!");    	
+        log.trace("Done!");    	
     }
     
     /**
@@ -168,11 +170,12 @@ public class BucketUtil {
      * @param key_name the key is the identifier of the file inside the bucket. think of this as the filename
      */
     public static void upload(String bucket_name,String file_path,String key_name) {
-//        log.trace("Uploading "+file_path+" to S3 bucket "+bucket_name+"...\n" );
+        log.trace("Uploading "+file_path+" to S3 bucket "+bucket_name+"...\n" );
     	try {
     	    s3.putObject(bucket_name, key_name, new File(file_path));
     	} catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
+            log.trace(e.getErrorMessage());
     	}
     }
     
@@ -182,12 +185,12 @@ public class BucketUtil {
      * @return a list object of type String
      */
     public static List<String> list(String bucket_name) {
-//        log.trace("Objects in S3 bucket "+bucket_name+":\n" );
+        log.trace("Objects in S3 bucket "+bucket_name+":\n" );
         ListObjectsV2Result result = s3.listObjectsV2(bucket_name);
         List<S3ObjectSummary> objects = result.getObjectSummaries();
         List<String>output=new ArrayList<String>();
         for (S3ObjectSummary os : objects) {
-//            log.trace("* " + os.getKey());
+            log.trace("* " + os.getKey());
         	output.add(os.getKey());
         }
         return output;
@@ -200,7 +203,7 @@ public class BucketUtil {
      * @return A file object containing the contents of the file downloaded
      */
     public static File download(String bucket_name, String key_name) {
-//        log.trace("Downloading "+key_name+" from S3 bucket "+bucket_name+"...\n");
+        log.trace("Downloading "+key_name+" from S3 bucket "+bucket_name+"...\n");
         File outfile=new File(key_name);
         try {
             S3Object o = s3.getObject(bucket_name, key_name);
@@ -214,19 +217,22 @@ public class BucketUtil {
             s3is.close();
             fos.close();
         } catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
         	outfile.delete();
         	return null;
         } catch (FileNotFoundException e) {
-//            log.trace(e.getMessage());
+            log.trace(e.getMessage());
+        	e.printStackTrace();
         	outfile.delete();
         	return null;
         } catch (IOException e) {
-//            log.trace(e.getMessage());
+            log.trace(e.getMessage());
+        	e.printStackTrace();
         	outfile.delete();
         	return null;
         }
-//        log.trace("Done!");
+        log.trace("Done!");
         return outfile;
     }
 
@@ -236,13 +242,14 @@ public class BucketUtil {
      * @param key_name the key of the file we are deleting inside of the bucket
      */
     public static void delete(String bucket_name, String key_name) {
-//        log.trace("Deleting object "+key_name+" from S3 bucket: "+bucket_name+"\n");
+        log.trace("Deleting object "+key_name+" from S3 bucket: "+bucket_name+"\n");
         try {
             s3.deleteObject(bucket_name, key_name);
         } catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
+            log.trace(e.getErrorMessage());
         }
-//        log.trace("Done!");
+        log.trace("Done!");
     }
     
     /**
@@ -252,7 +259,7 @@ public class BucketUtil {
      * @param key_name key of file inside bucket
      */
     public static void uploadFile(String file_path, String bucket_name,String key_name) {
-//        log.trace("file: " + file_path);
+        log.trace("file: " + file_path);
 		
 		// snippet-start:[s3.java1.s3_xfer_mgr_upload.single]
 		File f = new File(file_path);
@@ -262,7 +269,8 @@ public class BucketUtil {
 		progress(xfer);
     	
 		} catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
+            log.trace(e.getErrorMessage());
 		}
 		xfer_mgr.shutdownNow();
 			// snippet-end:[s3.java1.s3_xfer_mgr_upload.single]			
@@ -276,14 +284,15 @@ public class BucketUtil {
      * @return File object containing contents of the download
      */
     public static File downloadFile(String file_path,String bucket_name,String key_name) {
-//    	log.trace("downloadFile: "+file_path);
+    	log.trace("downloadFile: "+file_path);
     	File f = new File(file_path);
     	TransferManager xfer_mgr = TransferManagerBuilder.standard().build();
     	try {
     	    Download xfer = xfer_mgr.download(bucket_name, key_name, f);
     		progress(xfer);
     	} catch (AmazonServiceException e) {
-//            log.trace(e.getErrorMessage());
+        	e.printStackTrace();
+            log.trace(e.getErrorMessage());
     	}
     	xfer_mgr.shutdownNow();
     	return f;
@@ -298,7 +307,7 @@ public class BucketUtil {
     	while(!xfer.isDone()) {
     		if(progress!=(int)xfer.getProgress().getPercentTransferred()) {
     			progress=(int)xfer.getProgress().getPercentTransferred();
-//    			log.trace("Progress:"+progress+"%"+" Byte:"+xfer.getProgress().getBytesTransferred());
+    			log.trace("Progress:"+progress+"%"+" Byte:"+xfer.getProgress().getBytesTransferred());
 			}
     	}    	
     }
@@ -390,7 +399,7 @@ public class BucketUtil {
     }
     
     public static void main(String[] args) {
-//        log.trace("Start");
+        log.trace("Start BucketUtil test");
 
 		//initialize AmazonS3
 	    final AmazonS3 s3 = BucketUtil.s3;
@@ -405,6 +414,6 @@ public class BucketUtil {
 		
 		
 		
-//        log.trace("End");		
+        log.trace("End BucketUtil test");		
 	}
 }
