@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -27,6 +29,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.postgresql.util.PSQLException;
+import org.slf4j.Logger;
+
+import com.jaty.log.LogUtil;
 
 /**
  * Designed to work with postgres.
@@ -41,7 +46,7 @@ public class ConnectionUtil {
 	private static final String url=System.getenv("db_url");
 	private static final String user=System.getenv("db_username");
 	private static final String password=System.getenv("db_password");		
-	
+	private static final Logger logger=LogUtil.logger;
 	/**
 	 * Uses environment variables 
 	 * <br>
@@ -107,6 +112,9 @@ public class ConnectionUtil {
 	 * @param args list of objects used for stmt.set____(), see setStatement() for more info
 	 */
 	public static void stmtExecute(String SQL,Object...args) {
+		logger.trace("SQL="+SQL);
+		Arrays.asList(args).forEach((i)->{logger.trace("arg="+i+" class="+i.getClass());});
+		
 		Connection conn = getConnection();
 		PreparedStatement stmt=null;
 		try {
@@ -181,11 +189,14 @@ public class ConnectionUtil {
 	 * @return returns a 2d object array obj[rows][columns]
 	 */
 	public static Object[][] stmtExecuteQuery2D(String SQL,Object...args) {
+		logger.trace("SQL="+SQL);
+		Arrays.asList(args).forEach((i)->{logger.trace("arg="+i+" class="+i.getClass());});
+
 		Connection conn=ConnectionUtil.getConnection();
 		PreparedStatement stmt=null;
 		ResultSet set=null;
 		Object[][]obj= {{}};//=new Object[rows][columns];
-		ArrayList<ArrayList<Object>>output=new ArrayList<ArrayList<Object>>();
+		List<List<Object>>output=new ArrayList<List<Object>>();
 		try {
 			stmt=conn.prepareStatement(SQL);
 			for(int i=1;i<=args.length;i++)
@@ -209,8 +220,7 @@ public class ConnectionUtil {
 			}
 			obj=new Object[rows][columns];
 			for(int y=0;y<rows;y++)
-				for(int x=0;x<columns;x++)
-					obj[y][x]=output.get(y).get(x);
+				obj[y]=output.get(y).toArray();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -222,9 +232,9 @@ public class ConnectionUtil {
 		return obj;
 	}
 	/**
-	 * supports int, double, string
+	 * relies on set.getObject to find type from resultset.
 	 * defaults to object as last resort
-	 * @param set A non null ResultSet object
+	 * @param set a non null ResultSet object
 	 * @param i columnindex
 	 * @return attempts to return double, int, string, then object
 	 * @throws SQLException

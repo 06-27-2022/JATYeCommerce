@@ -312,9 +312,11 @@ public class BucketUtil {
     	}    	
     }
 
-	private static void test1() {
+    /**
+     * tests bucket creation and deletion
+     */
+	private static void test1(String bucket_name) {
 		//create bucket
-		String bucket_name="tomh07bucket";
 		Bucket b=createBucket(bucket_name);	
 		System.out.println(b.getOwner());
 		System.out.println("Buckets(create):"+s3.listBuckets().size());
@@ -328,9 +330,8 @@ public class BucketUtil {
 		System.out.println();    	
     }
     
-    private static void test2() {
+    private static void test2(String bucket_name) {
     	//create bucket
-    	String bucket_name="tomh07bucket";
     	createBucket(bucket_name);
     	
     	//path of file being uploaded
@@ -338,7 +339,7 @@ public class BucketUtil {
     	String key="testfile.png";
 
     	//check contents of bucket
-    	System.out.println("list:"+list(bucket_name).size());
+    	System.out.println("list(start):"+list(bucket_name).size());
     	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
@@ -365,9 +366,8 @@ public class BucketUtil {
     	file.delete();
     }
     
-    private static void test3(){
+    private static void test3(String bucket_name){
     	//create bucket
-    	String bucket_name="tomh07bucket";
     	createBucket(bucket_name);
     	
     	//path of file being uploaded
@@ -375,7 +375,7 @@ public class BucketUtil {
     	String key="testfile.png";
 
     	//check contents of bucket
-    	System.out.println("list:"+list(bucket_name).size());
+    	System.out.println("list(start):"+list(bucket_name).size());
     	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
@@ -408,9 +408,10 @@ public class BucketUtil {
 		s3.listBuckets().forEach((bucket)->{System.out.print(bucket.getName()+" ");});
 		System.out.println("\n=======================================");
 		
-		test1();
-		test2();
-		test3();
+    	String bucket_name="tomh07bucket";
+		test1(bucket_name);
+		test2(bucket_name);
+		test3(bucket_name);
 		
 		
 		
