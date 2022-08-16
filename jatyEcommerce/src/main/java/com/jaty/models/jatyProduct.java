@@ -1,32 +1,54 @@
 package com.jaty.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="jatyProduct")
 public class jatyProduct {
 
 	/**
 	 * Unique identifier for internal use.
 	 */
+	@Id
+	@Column(name="id")
+	@GeneratedValue(generator = "jatyProduct_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatyProduct_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 
 	 * of  jatyProduct.
 	 */
+	@ManyToOne
+	@JoinColumn(name="accountID")
 	private int accountId;
 	/**
 	 * Primary key used to retrieve picture assigned to 
 	 * jatyProduct.
 	 */
+	@Column(name="picture")
 	private String picture;
 	/**
 	 * Description of the jatyProduct including the name.
 	 */
+	@Column(name="description")
 	private String description;
 	/**
 	 * The number of the jatyProduct available for purchase.
 	 */
+	@Column(name="stock")
 	private int stock;
 	/**
 	 * The price of the jatyProduct per unit in US dollars.
 	 */
+	@Column(name="price")
 	private double price;
 	
 	//constructors for jatyProduct.
