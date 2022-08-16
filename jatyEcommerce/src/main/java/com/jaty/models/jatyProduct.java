@@ -28,7 +28,7 @@ public class jatyProduct {
 	 */
 	@ManyToOne
 	@JoinColumn(name="accountID")
-	private int accountId;
+	private jatyAccount accountId;
 	/**
 	 * Primary key used to retrieve picture assigned to 
 	 * jatyProduct.
@@ -65,7 +65,7 @@ public class jatyProduct {
 	 * @param stock
 	 * @param price
 	 */
-	public jatyProduct(int id, int accountId, String picture, String description, int stock, double price) {
+	public jatyProduct(int id, jatyAccount accountId, String picture, String description, int stock, double price) {
 		this.id=id;
 		this.accountId=accountId;
 		this.picture=picture;
@@ -81,10 +81,10 @@ public class jatyProduct {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getAccountId() {
+	public jatyAccount getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(int accountId) {
+	public void setAccountId(jatyAccount accountId) {
 		this.accountId = accountId;
 	}
 	public String getPicture() {
