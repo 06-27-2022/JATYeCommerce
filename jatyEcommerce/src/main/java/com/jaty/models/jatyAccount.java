@@ -1,5 +1,13 @@
 package com.jaty.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 /**
  * This class models an account for the JATY eCommerce
  * store. It is meant to handle transfer of data 
@@ -7,6 +15,8 @@ package com.jaty.models;
  * @author 1jestor1
  *
  */
+@Entity
+@Table(name = "jatyAccount")
 public class jatyAccount {
 
 	/**
@@ -14,16 +24,22 @@ public class jatyAccount {
 	 * account in products, the wallet and reviews owned
 	 * by the account.
 	 */
+	@Id
+	@Column(name="id")
+	@GeneratedValue(generator = "jatyAccount_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatyAccount_id_seq")
 	private int id;
 	/**
 	 * Unique username used for account login/creation,
 	 * and display name for product listing.
 	 */
+	@Column(name="username")
 	private String username;
 	/**
 	 * Password used to access a specific account for a
 	 * linked username during login.
 	 */
+	@Column(name="password")
 	private String password;
 	/**
 	 * Role assigned to account. Currently implemented
@@ -33,14 +49,17 @@ public class jatyAccount {
 	 * + moderator: in addition to default account features,
 	 *             this account can flag products for bans.
 	 */
+	@Column(name="role")
 	private String role;
 	/**
 	 * The city the owner of the account sends their stock from.
 	 */
+	@Column(name="city")
 	private String city;
 	/**
 	 * The state the owner of the account sends their stock from.
 	 */
+	@Column(name="state")
 	private String state;
 	
 	//constructors for jatyAccount
@@ -78,6 +97,7 @@ public class jatyAccount {
 		this.username=username;
 		this.password=password;
 	}
+	
 	//getter and setter methods for jatyAccount
 	
 	public int getId() {
@@ -104,19 +124,15 @@ public class jatyAccount {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
 	public String getCity() {
 		return city;
 	}
-
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 	public String getState() {
 		return state;
 	}
-
 	public void setState(String state) {
 		this.state = state;
 	}
