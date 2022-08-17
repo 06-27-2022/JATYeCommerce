@@ -44,8 +44,8 @@ import com.jaty.log.LogUtil;
 public class BucketUtil {
 	
     public final static AmazonS3 s3 = getAmazonS3();
+    public final static String bucket_name=System.getenv("s3bucket");
     private final static Logger log = getLogger();
-    
     /**
      * You may want to consider expanding this in the future to read things other than environment variables in case they do not exist
      * <br>
@@ -75,7 +75,7 @@ public class BucketUtil {
      * @param bucket_name Name of the desired bucket
      * @return A bucket you created. Will return null if the bucket exists but you did not create it.
      */
-    public static Bucket getBucket(String bucket_name) {
+    public static Bucket getBucket() {
         Bucket named_bucket = null;
         List<Bucket> buckets = s3.listBuckets();
         for (Bucket b : buckets) {
@@ -91,12 +91,12 @@ public class BucketUtil {
      * @param bucket_name Name of created bucket
      * @return The bucket you created. Null if there is a failure
      */
-    public static Bucket createBucket(String bucket_name) {
+    public static Bucket createBucket() {
         Bucket b = null;
         if (s3.doesBucketExistV2(bucket_name)) {
     		log.trace("Bucket "+bucket_name+" already exists.\n");
 
-            b = getBucket(bucket_name);
+            b = getBucket();
         } else {
             try {
             	log.trace("Bucket "+ bucket_name+" now exists.\n");
@@ -113,7 +113,7 @@ public class BucketUtil {
      * deletes a bucket from your list of owned buckets
      * @param bucket_name name of the bucket being deleted
      */
-    public static void deleteBucket(String bucket_name) {
+    public static void deleteBucket() {
     	log.trace("Deleting S3 bucket: " + bucket_name);
         try {
         	log.trace(" - removing objects from bucket");
@@ -169,7 +169,7 @@ public class BucketUtil {
      * @param file_path filepath of the the file being uploaded
      * @param key_name the key is the identifier of the file inside the bucket. think of this as the filename
      */
-    public static void upload(String bucket_name,String file_path,String key_name) {
+    public static void upload(String file_path,String key_name) {
         log.trace("Uploading "+file_path+" to S3 bucket "+bucket_name+"...\n" );
     	try {
     	    s3.putObject(bucket_name, key_name, new File(file_path));
@@ -184,7 +184,7 @@ public class BucketUtil {
      * @param bucket_name name of the bucket being observed
      * @return a list object of type String
      */
-    public static List<String> list(String bucket_name) {
+    public static List<String> list() {
         log.trace("Objects in S3 bucket "+bucket_name+":\n" );
         ListObjectsV2Result result = s3.listObjectsV2(bucket_name);
         List<S3ObjectSummary> objects = result.getObjectSummaries();
@@ -202,7 +202,7 @@ public class BucketUtil {
      * @param key_name the key of the file being downloaded
      * @return A file object containing the contents of the file downloaded
      */
-    public static File download(String bucket_name, String key_name) {
+    public static File download(String key_name) {
         log.trace("Downloading "+key_name+" from S3 bucket "+bucket_name+"...\n");
         File outfile=new File(key_name);
         try {
@@ -241,7 +241,7 @@ public class BucketUtil {
      * @param bucket_name name of the bucket we are working in
      * @param key_name the key of the file we are deleting inside of the bucket
      */
-    public static void delete(String bucket_name, String key_name) {
+    public static void delete(String key_name) {
         log.trace("Deleting object "+key_name+" from S3 bucket: "+bucket_name+"\n");
         try {
             s3.deleteObject(bucket_name, key_name);
@@ -258,7 +258,7 @@ public class BucketUtil {
      * @param bucket_name bucket we are uploading to
      * @param key_name key of file inside bucket
      */
-    public static void uploadFile(String file_path, String bucket_name,String key_name) {
+    public static void uploadFile(String file_path, String key_name) {
         log.trace("file: " + file_path);
 		
 		// snippet-start:[s3.java1.s3_xfer_mgr_upload.single]
@@ -283,7 +283,7 @@ public class BucketUtil {
      * @param key_name key of file we are downloading from the bucket
      * @return File object containing contents of the download
      */
-    public static File downloadFile(String file_path,String bucket_name,String key_name) {
+    public static File downloadFile(String file_path,String key_name) {
     	log.trace("downloadFile: "+file_path);
     	File f = new File(file_path);
     	TransferManager xfer_mgr = TransferManagerBuilder.standard().build();
@@ -315,86 +315,86 @@ public class BucketUtil {
     /**
      * tests bucket creation and deletion
      */
-	private static void test1(String bucket_name) {
+	private static void test1() {
 		//create bucket
-		Bucket b=createBucket(bucket_name);	
+		Bucket b=createBucket();	
 		System.out.println(b.getOwner());
 		System.out.println("Buckets(create):"+s3.listBuckets().size());
 		s3.listBuckets().forEach((bucket)->{System.out.print(bucket.getName()+" ");});
 		System.out.println();
 		
 		//delete bucket
-		s3.listBuckets().forEach((bucket)->{deleteBucket(bucket.getName());});
+		s3.listBuckets().forEach((bucket)->{deleteBucket();});
 		System.out.println("Buckets(delete):"+s3.listBuckets().size());
 		s3.listBuckets().forEach((bucket)->{System.out.print(bucket.getName()+" ");});
 		System.out.println();    	
     }
     
-    private static void test2(String bucket_name) {
+    private static void test2() {
     	//create bucket
-    	createBucket(bucket_name);
+    	createBucket();
     	
     	//path of file being uploaded
     	String file_path="C:\\Users\\tomh0\\Pictures\\Screenshots\\Screenshot (10).png";
     	String key="testfile.png";
 
     	//check contents of bucket
-    	System.out.println("list(start):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	System.out.println("list(start):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//upload test
-    	BucketUtil.upload(bucket_name,file_path, key);
-    	System.out.println("list(upload):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	BucketUtil.upload(file_path, key);
+    	System.out.println("list(upload):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//download test
-    	File file=BucketUtil.download(bucket_name, key);
-    	System.out.println("list(download):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	File file=BucketUtil.download(key);
+    	System.out.println("list(download):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//delete test
-    	delete(bucket_name,key);
-    	System.out.println("list(delete):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	delete(key);
+    	System.out.println("list(delete):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//delete bucket
-    	deleteBucket(bucket_name);
+    	deleteBucket();
     	file.delete();
     }
     
-    private static void test3(String bucket_name){
+    private static void test3(){
     	//create bucket
-    	createBucket(bucket_name);
+    	createBucket();
     	
     	//path of file being uploaded
     	String file_path="C:\\Users\\tomh0\\Pictures\\Screenshots\\Screenshot (10).png";
     	String key="testfile.png";
 
     	//check contents of bucket
-    	System.out.println("list(start):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	System.out.println("list(start):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//upload test
-    	BucketUtil.uploadFile(file_path, bucket_name, key);
-    	System.out.println("list(upload):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	BucketUtil.uploadFile(file_path, key);
+    	System.out.println("list(upload):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
 
     	//download test
-    	BucketUtil.downloadFile(file_path, bucket_name, key);
-    	System.out.println("list(download):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	BucketUtil.downloadFile(file_path, key);
+    	System.out.println("list(download):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();
     	
     	//delete test
-    	delete(bucket_name,key);
-    	System.out.println("list(delete):"+list(bucket_name).size());
-    	list(bucket_name).forEach((str)->{System.out.print(str+" ");});
+    	delete(key);
+    	System.out.println("list(delete):"+list().size());
+    	list().forEach((str)->{System.out.print(str+" ");});
     	System.out.println();   	
     }
     
@@ -408,10 +408,9 @@ public class BucketUtil {
 		s3.listBuckets().forEach((bucket)->{System.out.print(bucket.getName()+" ");});
 		System.out.println("\n=======================================");
 		
-    	String bucket_name="tomh07bucket";
-		test1(bucket_name);
-		test2(bucket_name);
-		test3(bucket_name);
+		test1();
+		test2();
+		test3();
 		
 		
 		
