@@ -1,6 +1,8 @@
 package com.jaty.controller;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,6 +37,10 @@ public class AccountController {
 	@RequestMapping(path="/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody Account account) {
 		this.accountService.createAccount(account);
+	}
+	@RequestMapping(path="/listall")
+	public List<Account> findAllByOrderById(){
+		return this.accountService.findAllByOrderById();
 	}
 
 	
