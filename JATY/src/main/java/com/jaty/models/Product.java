@@ -11,16 +11,16 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="jatyProduct")
-public class jatyProduct {
+@Table(name="jatyproduct")
+public class Product {
 
 	/**
 	 * Unique identifier for internal use.
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "jatyProduct_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="jatyProduct_id_seq")
+	@GeneratedValue(generator = "product_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="product_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 
@@ -28,7 +28,7 @@ public class jatyProduct {
 	 */
 	@ManyToOne
 	@JoinColumn(name="accountID")
-	private jatyAccount accountId;
+	private Account accountId;
 	/**
 	 * Primary key used to retrieve picture assigned to 
 	 * jatyProduct.
@@ -53,7 +53,7 @@ public class jatyProduct {
 	
 	//constructors for jatyProduct.
 	
-	public jatyProduct() {
+	public Product() {
 		
 	}
 	/**
@@ -65,7 +65,7 @@ public class jatyProduct {
 	 * @param stock
 	 * @param price
 	 */
-	public jatyProduct(int id, jatyAccount accountId, String picture, String description, int stock, double price) {
+	public Product(int id, Account accountId, String picture, String description, int stock, double price) {
 		this.id=id;
 		this.accountId=accountId;
 		this.picture=picture;
@@ -81,10 +81,10 @@ public class jatyProduct {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public jatyAccount getAccountId() {
+	public Account getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(jatyAccount accountId) {
+	public void setAccountId(Account accountId) {
 		this.accountId = accountId;
 	}
 	public String getPicture() {

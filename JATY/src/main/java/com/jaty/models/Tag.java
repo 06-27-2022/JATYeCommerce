@@ -1,20 +1,24 @@
 package com.jaty.models;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-public class jatyTag {
+@Entity
+@Table(name="jatytag")
+public class Tag {
 	
 	/**
 	 * Unique identifier for internal use.
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "jatyTag_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="jatyTag_id_seq")
+	@GeneratedValue(generator = "tag_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="tag_id_seq")
 	private int id;
 	/**
 	 * A descriptor/category that groups a product with other
@@ -30,7 +34,7 @@ public class jatyTag {
 	private boolean ban;
 	
 	//constructors for jatyTag.
-	public jatyTag() {
+	public Tag() {
 		
 	}
 	
@@ -40,7 +44,7 @@ public class jatyTag {
 	 * @param tag
 	 * @param ban
 	 */
-	public jatyTag(int id, String tag, boolean ban) {
+	public Tag(int id, String tag, boolean ban) {
 		this.setId(id);
 		this.setTag(tag);
 		this.setBan(ban);

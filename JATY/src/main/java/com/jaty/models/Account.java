@@ -16,8 +16,8 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "jatyAccount")
-public class jatyAccount {
+@Table(name = "jatyaccount")
+public class Account {
 
 	/**
 	 * Unique identifier used to reference a specific
@@ -26,8 +26,8 @@ public class jatyAccount {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "jatyAccount_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="jatyAccount_id_seq")
+	@GeneratedValue(generator = "account_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="account_id_seq")
 	private int id;
 	/**
 	 * Unique username used for account login/creation,
@@ -64,7 +64,7 @@ public class jatyAccount {
 	
 	//constructors for jatyAccount
 	
-	public jatyAccount() {
+	public Account() {
 		
 	}
 	
@@ -77,7 +77,7 @@ public class jatyAccount {
 	 * @param city
 	 * @param state
 	 */
-	public jatyAccount(int id, String username, String password, String role, String city, String state) {
+	public Account(int id, String username, String password, String role, String city, String state) {
 		this.id=id;
 		this.username=username;
 		this.password=password;
@@ -93,7 +93,7 @@ public class jatyAccount {
 	 * @param username
 	 * @param password
 	 */
-	public jatyAccount(String username, String password) {
+	public Account(String username, String password) {
 		this.username=username;
 		this.password=password;
 	}

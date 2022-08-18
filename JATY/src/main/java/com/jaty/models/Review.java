@@ -1,6 +1,7 @@
 package com.jaty.models;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -8,16 +9,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-public class jatyReview {
+@Entity
+@Table(name="jatyreview")
+public class Review {
 	
 	/**
 	 * Unique identifier for internal use.
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "jatyReview_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="jatyReview_id_seq")
+	@GeneratedValue(generator = "review_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="review_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 
@@ -25,14 +29,14 @@ public class jatyReview {
 	 */
 	@OneToOne
 	@JoinColumn(name="accountID")
-	private jatyAccount accountId;
+	private Account accountId;
 	/**
 	 * Reference to the jatyProduct id that owns an instance 
 	 * of  jatyReview.
 	 */
 	@ManyToOne
 	@JoinColumn(name="productID")
-	private jatyProduct productId;
+	private Product productId;
 	/**
 	 * A 0 to 5 rating of the product the user received.
 	 */
@@ -46,7 +50,7 @@ public class jatyReview {
 	
 	
 	//constructors for jatyReview.
-	public jatyReview() {
+	public Review() {
 		
 	}
 	
@@ -58,7 +62,7 @@ public class jatyReview {
 	 * @param rating
 	 * @param reviewBody
 	 */
-	public jatyReview(int id, jatyAccount accountId, jatyProduct productId, int rating, String reviewBody) {
+	public Review(int id, Account accountId, Product productId, int rating, String reviewBody) {
 		this.id=id;
 		this.accountId=accountId;
 		this.productId=productId;
@@ -74,16 +78,16 @@ public class jatyReview {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public jatyAccount getAccountId() {
+	public Account getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(jatyAccount accountId) {
+	public void setAccountId(Account accountId) {
 		this.accountId = accountId;
 	}
-	public jatyProduct getProductId() {
+	public Product getProductId() {
 		return productId;
 	}
-	public void setProductId(jatyProduct productId) {
+	public void setProductId(Product productId) {
 		this.productId = productId;
 	}
 	public int getRating() {
