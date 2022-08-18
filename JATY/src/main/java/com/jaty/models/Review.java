@@ -20,8 +20,8 @@ public class Review {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "review_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="review_id_seq")
+	@GeneratedValue(generator = "jatyreview_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatyreview_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 

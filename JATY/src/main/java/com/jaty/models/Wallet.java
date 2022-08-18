@@ -19,8 +19,8 @@ public class Wallet {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "wallet_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="wallet_id_seq")
+	@GeneratedValue(generator = "jatywallet_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatywallet_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 

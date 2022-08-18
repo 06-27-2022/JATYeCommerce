@@ -17,8 +17,8 @@ public class Tag {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "tag_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="tag_id_seq")
+	@GeneratedValue(generator = "jatytag_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatytag_id_seq")
 	private int id;
 	/**
 	 * A descriptor/category that groups a product with other
