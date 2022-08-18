@@ -19,8 +19,8 @@ public class Product {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "product_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="product_id_seq")
+	@GeneratedValue(generator = "jatyproduct_id_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatyproduct_id_seq")
 	private int id;
 	/**
 	 * Reference to the jatyAccount id that owns an instance 
@@ -51,6 +51,9 @@ public class Product {
 	@Column(name="price")
 	private double price;
 	
+	@Column(name="productname")
+	private String name;
+	
 	//constructors for jatyProduct.
 	
 	public Product() {
@@ -64,14 +67,16 @@ public class Product {
 	 * @param description
 	 * @param stock
 	 * @param price
+	 * @param name
 	 */
-	public Product(int id, Account accountId, String picture, String description, int stock, double price) {
+	public Product(int id, Account accountId, String picture, String description, int stock, double price, String name) {
 		this.id=id;
 		this.accountId=accountId;
 		this.picture=picture;
 		this.description=description;
 		this.stock=stock;
 		this.price=price;
+		this.name=name;
 	}
 	//getter and setter methods for jatyProduct.
 	
@@ -111,5 +116,12 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name=name;
+	}
+	
 	
 }
