@@ -26,8 +26,8 @@ public class Account {
 	 */
 	@Id
 	@Column(name="id")
-	@GeneratedValue(generator = "account_id_seq", strategy = GenerationType.AUTO)
-	@SequenceGenerator(allocationSize=1, name="account_id_seq")
+	@GeneratedValue(generator="jatyaccount_id_seq",strategy = GenerationType.AUTO)
+	@SequenceGenerator(allocationSize=1, name="jatyaccount_id_seq")
 	private int id;
 	/**
 	 * Unique username used for account login/creation,
