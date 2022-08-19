@@ -34,8 +34,8 @@ public class Product {
 	 * of  jatyProduct.
 	 */
 	@ManyToOne
-	@JoinColumn(name="accountID")
-	private Account accountId;
+	@JoinColumn(name="accountid")
+	private Account accountid;
 	/**
 	 * Primary key used to retrieve picture assigned to 
 	 * jatyProduct.
@@ -104,7 +104,7 @@ public class Product {
 	 */
 	public Product(int id, Account accountId, String picture, String description, int stock, double price, String name) {
 		this.id=id;
-		this.accountId=accountId;
+		this.accountid=accountId;
 		this.picture=picture;
 		this.description=description;
 		this.stock=stock;
@@ -120,10 +120,10 @@ public class Product {
 		this.id = id;
 	}
 	public Account getAccountId() {
-		return accountId;
+		return accountid;
 	}
 	public void setAccountId(Account accountId) {
-		this.accountId = accountId;
+		this.accountid = accountId;
 	}
 	public String getPicture() {
 		return picture;

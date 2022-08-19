@@ -21,9 +21,17 @@ public class TagController {
 		return this.tagService.getTag(id);
 	}
 	
+	@RequestMapping(path="/search")
+	public Tag get(@RequestParam String tagname) {
+		return this.tagService.getTag(tagname);
+	}
+	
+	
 	@RequestMapping(path="/save", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody Tag tag) {
 		this.tagService.save(tag);
 	}
+	
+	
 
 }

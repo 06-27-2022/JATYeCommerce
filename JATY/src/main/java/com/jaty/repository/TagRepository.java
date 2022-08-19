@@ -10,4 +10,6 @@ public interface TagRepository extends JpaRepository<Tag, Integer>{
 	<S extends Tag> S save(S entity);
 
 	Tag findById(int id);
+	
+	Tag findByTag(String tagname);
 }
