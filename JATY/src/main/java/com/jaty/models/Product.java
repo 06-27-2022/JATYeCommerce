@@ -1,11 +1,18 @@
 package com.jaty.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -35,6 +42,8 @@ public class Product {
 	 */
 	@Column(name="picture")
 	private String picture;
+	@Column(name="productname")
+	private String name;
 	/**
 	 * Description of the jatyProduct including the name.
 	 */
@@ -51,10 +60,34 @@ public class Product {
 	@Column(name="price")
 	private double price;
 	
-	@Column(name="productname")
-	private String name;
+	@ManyToMany(fetch = FetchType.LAZY,
+		      cascade = {
+		          CascadeType.PERSIST,
+		          CascadeType.MERGE
+		      })
+	@JoinTable(name="jatyproducttotag",
+		joinColumns = 			{@JoinColumn(name="productid", 	referencedColumnName="id")},
+		inverseJoinColumns = 	{@JoinColumn(name="tagid", 		referencedColumnName="id")})
+	private Set<Tag>tags=new HashSet<>();
 	
 	//constructors for jatyProduct.
+	public Set<Tag> getTags() {
+		return tags;
+	}
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+		tag.getProducts().add(this);
+	}
+	public void removeTag(long tagId) {
+	    Tag tag = this.tags.stream().filter(t -> t.getId() == tagId).findFirst().orElse(null);
+	    if (tag != null) {
+	      this.tags.remove(tag);
+	      tag.getProducts().remove(this);
+	    }
+	}
 	
 	public Product() {
 		
