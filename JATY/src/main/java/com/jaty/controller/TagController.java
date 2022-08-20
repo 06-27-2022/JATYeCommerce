@@ -1,5 +1,7 @@
 package com.jaty.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +23,14 @@ public class TagController {
 		return this.tagService.getTag(id);
 	}
 	
+//	@RequestMapping(path="/get")
+//	public Tag get(@RequestParam String tagname) {
+//		return this.tagService.getTag(tagname);
+//	}
+	
 	@RequestMapping(path="/search")
-	public Tag get(@RequestParam String tagname) {
-		return this.tagService.getTag(tagname);
+	public List<Tag> search(@RequestParam String tagname) {
+		return this.tagService.searchTag(tagname);
 	}
 	
 	

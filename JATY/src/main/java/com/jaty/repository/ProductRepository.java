@@ -16,6 +16,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	Product findById(int id);
 	
 	List<Product> findByTags(Tag tags);
+
+	List<Product> findByTagsIn(List<Tag> tags);
+	
+	List<Product> findByTagsTagIn(List<String> tagnames);
+	
+	//List<Product> findDistinctByTagsTagInAndTagsBan(List<String>tagnames,boolean ban);
+	
 	
 	List<Product> findByAccountid(Account account);
 

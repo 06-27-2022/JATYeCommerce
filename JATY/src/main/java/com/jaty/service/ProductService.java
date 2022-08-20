@@ -24,6 +24,17 @@ public class ProductService {
 	public List<Product> getProductByTags(Tag tags) {
 		return this.productRepository.findByTags(tags);
 	}
+	public List<Product> getProductByTagsIn(List<Tag> tags) {
+		return this.productRepository.findByTagsIn(tags);
+	}
+	
+	public List<Product> getProductByTagsTagIn(List<String> tagnames) {
+		return this.productRepository.findByTagsTagIn(tagnames);
+	}
+	
+	
+	
+	
 	public List<Product> getProductByAccount(Account account) {
 		return this.productRepository.findByAccountid(account);
 	}
