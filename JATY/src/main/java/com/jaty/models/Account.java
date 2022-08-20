@@ -98,6 +98,11 @@ public class Account {
 		this.password=password;
 	}
 	
+	public Account(int id) {
+		this.id=id;
+	}
+	
+	
 	//getter and setter methods for jatyAccount
 	
 	public int getId() {

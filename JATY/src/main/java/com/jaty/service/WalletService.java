@@ -3,7 +3,7 @@ package com.jaty.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jaty.models.Tag;
+import com.jaty.models.Account;
 import com.jaty.models.Wallet;
 import com.jaty.repository.WalletRepository;
 
@@ -23,4 +23,7 @@ public class WalletService {
 		this.walletRepository.save(wallet);
 	}
 	
+	public Wallet getWalletByAccount(Account account) {
+		return this.walletRepository.findByAccountId(account);
+	}
 }

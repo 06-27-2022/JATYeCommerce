@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaty.models.Account;
+import com.jaty.models.Wallet;
 import com.jaty.service.AccountService;
+import com.jaty.service.WalletService;
 
 @RestController("jatyAccountController")
 @RequestMapping(path ="/account")
@@ -23,6 +25,9 @@ public class AccountController {
 	
 	@Autowired
 	AccountService accountService;
+	
+	@Autowired
+	WalletService walletService;
 	
 	@Autowired
 	Logger log;
@@ -55,7 +60,7 @@ public class AccountController {
 		HttpSession session = request.getSession(false);
 		String s = "session is null";
 		if(session != null) {
-			s = "account id is" + session.getAttribute("accountId");
+			s = "account id is " + session.getAttribute("accountId");
 		}
 		return s;
 	}
@@ -76,7 +81,7 @@ public class AccountController {
 	@RequestMapping(path="/logout")
 	public String logOut(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		session.invalidate();
+		if(session != null) session.invalidate();
 		return "logged-out";
 	}
 	@RequestMapping(path="/new",consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -90,6 +95,8 @@ public class AccountController {
 			session.setAttribute("accountId", accountSearch.getId());
 			session.setAttribute("role", accountSearch.getRole());
 			//logic to create a wallet
+			Wallet newWallet = new Wallet(accountSearch, 0.00);
+			walletService.save(newWallet);
 			return "new-user-created with id = "+ session.getAttribute("accountId");
 		}else {
 			return "username-already-exists";
