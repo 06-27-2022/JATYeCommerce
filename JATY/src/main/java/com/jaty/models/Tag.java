@@ -1,6 +1,5 @@
 package com.jaty.models;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,6 +15,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * {
+    "id": 2,
+    "tag": "asdf2",
+    "ban": false
+}
+ * @author tomh0
+ *
+ */
 @Entity
 @Table(name="jatytag")
 public class Tag {
@@ -48,7 +56,7 @@ public class Tag {
 		      },
 		      mappedBy = "tags")
 	@JsonIgnore	
-	private Set<Product>products = new HashSet<>();
+	private Set<Product>products;
 	
 	public Set<Product> getProducts() {
 		return products;
