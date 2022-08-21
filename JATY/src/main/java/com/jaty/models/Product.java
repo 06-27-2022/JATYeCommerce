@@ -1,6 +1,5 @@
 package com.jaty.models;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +16,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ * {
+    "id": 1,
+    "picture": null,
+    "name": "placeholder",
+    "description": "create test product2",
+    "stock": 10,
+    "price": 1234.12,
+    "tags": [
+        {
+            "id": 2,
+            "tag": "asdf2",
+            "ban": false
+        },
+        {
+            "id": 1,
+            "tag": "asdf1",
+            "ban": true
+        },
+        {
+            "id": 3,
+            "tag": "asdf3",
+            "ban": false
+        }
+    ],
+    "accountId": {
+        "id": 2,
+        "username": "name1",
+        "password": "pass1",
+        "role": "test",
+        "city": "testcity",
+        "state": "teststate"
+    }
+}
+ * @author tomh0
+ *
+ */
 @Entity
 @Table(name="jatyproduct")
 public class Product {
@@ -68,26 +104,7 @@ public class Product {
 	@JoinTable(name="jatyproducttotag",
 		joinColumns = 			{@JoinColumn(name="productid", 	referencedColumnName="id")},
 		inverseJoinColumns = 	{@JoinColumn(name="tagid", 		referencedColumnName="id")})
-	private Set<Tag>tags=new HashSet<>();
-	
-	//constructors for jatyProduct.
-	public Set<Tag> getTags() {
-		return tags;
-	}
-	public void setTags(Set<Tag> tags) {
-		this.tags = tags;
-	}
-	public void addTag(Tag tag) {
-		this.tags.add(tag);
-		tag.getProducts().add(this);
-	}
-	public void removeTag(long tagId) {
-	    Tag tag = this.tags.stream().filter(t -> t.getId() == tagId).findFirst().orElse(null);
-	    if (tag != null) {
-	      this.tags.remove(tag);
-	      tag.getProducts().remove(this);
-	    }
-	}
+	private Set<Tag>tags;
 	
 	public Product() {
 		
@@ -111,7 +128,24 @@ public class Product {
 		this.price=price;
 		this.name=name;
 	}
-	//getter and setter methods for jatyProduct.
+	//constructors for jatyProduct.
+	public Set<Tag> getTags() {
+		return tags;
+	}
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+		tag.getProducts().add(this);
+	}
+	public void removeTag(long tagId) {
+	    Tag tag = this.tags.stream().filter(t -> t.getId() == tagId).findFirst().orElse(null);
+	    if (tag != null) {
+	      this.tags.remove(tag);
+	      tag.getProducts().remove(this);
+	    }
+	}
 	
 	public int getId() {
 		return id;
