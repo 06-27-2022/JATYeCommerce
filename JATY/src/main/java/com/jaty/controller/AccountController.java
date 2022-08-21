@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaty.models.Account;
-import com.jaty.models.Wallet;
 import com.jaty.service.AccountService;
-import com.jaty.service.WalletService;
 
 @RestController("jatyAccountController")
 @RequestMapping(path ="/account")
@@ -25,9 +23,6 @@ public class AccountController {
 	
 	@Autowired
 	AccountService accountService;
-	
-	@Autowired
-	WalletService walletService;
 	
 	@Autowired
 	Logger log;
@@ -65,41 +60,39 @@ public class AccountController {
 		return s;
 	}
 	
-	
+	/**
+	 * From the client receives an account json containing login necessary information, checks it
+	 * against database records to determine access and gives client a HttpSession for further 
+	 * site navigation.
+	 * @param account object should have both the username and password as strings in the json.
+	 * @param request holds the HttpSession.
+	 * @return HttpSession with accountId and accountRole attributes.
+	 */
 	@RequestMapping(path="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String  logIn(@RequestBody Account account, HttpServletRequest request) {
-		Account loginAttempt = accountService.getAccountFromLogIn(account.getUsername(), account.getPassword());
-		if(loginAttempt==null) {
-			return "bad-login";
-		}else {
-			HttpSession session = request.getSession();
-			session.setAttribute("accountId", loginAttempt.getId());
-			session.setAttribute("role", loginAttempt.getRole());
-			return "good-login";
-		}
+		return this.accountService.accountLogin(account, request);
 	}
+	
+	/**
+	 * Removes all information from the HttpSession to disable access.
+	 * @param request
+	 * @return an empty HttpSession
+	 */
 	@RequestMapping(path="/logout")
 	public String logOut(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if(session != null) session.invalidate();
-		return "logged-out";
+		return this.accountService.accountLogout(request);
 	}
+	
+	/**
+	 * From the client receives an account json containing account necessary information, checks it
+	 * against database records to determine validity, modifies the database appropriately in both
+	 * the jatyAccount & jatyWallet tables and provides an HttpSession similar to the logIn method. 
+	 * @param account object should have both the username, password, city and state as strings in the json.
+	 * @param request holds the HttpSession.
+	 * @return HttpSession with accountId and accountRole attributes.
+	 */
 	@RequestMapping(path="/new",consumes=MediaType.APPLICATION_JSON_VALUE)
 	public String newAccount(@RequestBody Account account, HttpServletRequest request) {
-		Account accountSearch = accountService.getAccountFromLogIn(account.getUsername(), account.getPassword());
-		if(accountSearch==null) {
-			account.setRole("default");
-			accountService.createAccount(account);
-			accountSearch = accountService.getAccountFromLogIn(account.getUsername(), account.getPassword());
-			HttpSession session = request.getSession();
-			session.setAttribute("accountId", accountSearch.getId());
-			session.setAttribute("role", accountSearch.getRole());
-			//logic to create a wallet
-			Wallet newWallet = new Wallet(accountSearch, 0.00);
-			walletService.save(newWallet);
-			return "new-user-created with id = "+ session.getAttribute("accountId");
-		}else {
-			return "username-already-exists";
-		}
+		return this.accountService.clientCreateAccount(account, request);
 	}
 }
