@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.jaty.models.Account;
 import com.jaty.models.Wallet;
 import com.jaty.repository.AccountRepository;
+import com.jaty.repository.WalletRepository;
 
 @Service("jatyAccountService")
 public class AccountService {
@@ -19,7 +20,7 @@ public class AccountService {
 	private AccountRepository accountRepository;
 	
 	@Autowired
-	private WalletService walletService;
+	private WalletRepository walletRepository;
 	
 	public AccountService() {}
 	
@@ -64,7 +65,7 @@ public class AccountService {
 			session.setAttribute("role", accountSearch.getRole());
 			//logic to create a wallet
 			Wallet newWallet = new Wallet(accountSearch, 0.00);
-			walletService.save(newWallet);
+			walletRepository.save(newWallet);
 			return "new-user-created with id = "+ session.getAttribute("accountId");
 		}else {
 			return "username-already-exists";
