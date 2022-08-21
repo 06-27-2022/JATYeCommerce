@@ -23,11 +23,15 @@ public class TagService {
 		return this.tagRepository.findByTag(tagname);
 	}
 	public List<Tag>searchTag(String tagname){
-		return this.tagRepository.findByTagStartingWith(tagname);
+		return this.tagRepository.findByTagStartingWithIgnoreCase(tagname);
 	}
 	
 	public void save(Tag tag) {
 		this.tagRepository.save(tag);
+	}
+	
+	public void delete(Tag tag) {
+		this.tagRepository.delete(tag);
 	}
 	
 }

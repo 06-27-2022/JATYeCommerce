@@ -29,7 +29,7 @@ public class ProductService {
 	}
 	
 	public List<Product> getProductByName(String productname){
-		return this.productRepository.findByNameStartingWith(productname);
+		return this.productRepository.findByNameStartingWithIgnoreCase(productname);
 	}
 	
 	public List<Product> getProductByTagsName(List<String> tagnames) {
@@ -89,8 +89,8 @@ public class ProductService {
 	}
 
 	public void saveTag(Product product, Tag tag) {
-		Product p=productRepository.findById(product.getId());
-		Tag t=tagRepository.findById(tag.getId());
+		Product p=this.productRepository.findById(product.getId());
+		Tag t=this.tagRepository.findById(tag.getId());
 		if(p==null||t==null)return;
 		p.addTag(t);
 		saveProduct(p);
@@ -98,12 +98,12 @@ public class ProductService {
 	
 	public void saveTags(Product product, List<Tag>tags) {		
 		//confirm product exists
-		Product p=productRepository.findById(product.getId());
+		Product p=this.productRepository.findById(product.getId());
 		if(p==null)return;
 		//adding in the individual tags one by one
 		for(Tag tag:tags) {
 			//confirm tag exists
-			Tag t=tagRepository.findById(tag.getId());
+			Tag t=this.tagRepository.findById(tag.getId());
 			if(t==null)continue;
 			//add tag to product
 			p.addTag(t);
@@ -111,4 +111,9 @@ public class ProductService {
 		//save changes
 		saveProduct(p);					
 	}
+	
+	public void deleteProduct(Product product) {
+		this.productRepository.delete(product);
+	}
+	
 }

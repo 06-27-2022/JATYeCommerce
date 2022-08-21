@@ -36,7 +36,8 @@ public class TagController {
 	/**
 	 * Searches all tags for tagnames that start with the String tagname.
 	 * For example, searching asdf1 would return tags with asdf1 asdf1234 while excluding tags with 
-	 * asdf2 and asdf3
+	 * asdf2 and asdf3.
+	 * Ignores case so ASDF1 can return asdf1 and asdf1234
 	 * @param tagname a request parameter called "tagname" which indicates what the desired tag's tagname starts with
 	 * @return a list of tags from the database.
 	 */
@@ -55,6 +56,16 @@ public class TagController {
 		this.tagService.save(tag);
 	}
 	
+	/**
+	 * DOES NOT WORK
+	 * <br>
+	 * violates foreign key constraint blahblah on table jatyproducttotag 
+	 * @param tag
+	 */
+	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void delete(@RequestBody Tag tag) {
+		this.tagService.delete(tag);
+	}
 	
 
 }

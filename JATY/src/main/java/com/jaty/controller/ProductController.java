@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
-import com.jaty.models.ProductToTag;
-import com.jaty.models.ProductToTags;
+import com.jaty.models.utils.ProductToTag;
+import com.jaty.models.utils.ProductToTags;
 import com.jaty.service.ProductService;
 
 /**
@@ -42,8 +42,9 @@ public class ProductController {
 	}
 
 	/**
-	 * Search's all products with a name start starts with the provided string
-	 * @param productname a request parameter "productname with the value being the 
+	 * Search's all products with a name that starts with the provided string.
+	 * The search is case insensitive so Asdf will can return ASDF1 and asdf2
+	 * @param productname a request parameter "productname" with the value being the 
 	 * name of the product being searched.
 	 * @return All products whose name start with productname
 	 */
@@ -57,6 +58,8 @@ public class ProductController {
 	 * Will provide all products with its tag's strings in the list tagnames. 
 	 * The products must have all the tags in tagnames in in order to be returned.
 	 * Products with banned tags will not be included in the returned products.
+	 * Is case sensitive because the In keyword used in query methods is 
+	 * incompatible with the IgnoreCase keyword.
 	 * @param tagnames a list of strings such as [asdf1,asdf2] 
 	 * @return a list of products with no duplicates with all requested tags
 	 */
@@ -108,6 +111,15 @@ public class ProductController {
 	@RequestMapping(path="/save/tags", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveTags(@RequestBody ProductToTags pt) {
 		this.productService.saveTags(pt.getProduct(),pt.getTags());
+	}		
+
+	/**
+	 * Deletes a product. Will also handle removing its producttotag relationships.
+	 * @param product A product object. JPA only requires an id for JSON.
+	 */
+	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteProduct(@RequestBody Product product) {
+		this.productService.deleteProduct(product);
 	}		
 }
 

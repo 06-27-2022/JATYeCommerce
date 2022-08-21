@@ -1,6 +1,9 @@
-package com.jaty.models;
+package com.jaty.models.utils;
 
 import java.util.List;
+
+import com.jaty.models.Product;
+import com.jaty.models.Tag;
 
 /**
  * 	{

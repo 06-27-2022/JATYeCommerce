@@ -1,4 +1,4 @@
-package com.jaty.models;
+package com.jaty.models.utils;
 
 import java.io.Serializable;
 
@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import com.jaty.models.Product;
+import com.jaty.models.Tag;
 
 /**
  * {
