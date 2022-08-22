@@ -57,10 +57,10 @@ public class TagController {
 	}
 	
 	/**
-	 * DOES NOT WORK
-	 * <br>
-	 * violates foreign key constraint blahblah on table jatyproducttotag 
-	 * @param tag
+	 * https://stackoverflow.com/questions/14585836/hibernate-many-to-many-cascading-delete?rq=1
+	 * deletes a single tag from the database. Will handle all relationships in
+	 * the producttotag join table
+	 * @param tag a single tag object. Requires an id, all other tag information is not used.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody Tag tag) {

@@ -4,8 +4,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -98,12 +100,16 @@ public class Product {
 	
 	@ManyToMany(fetch = FetchType.LAZY,
 		      cascade = {
+		          CascadeType.DETACH,
+		          CascadeType.MERGE,
 		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      })
+		          CascadeType.REFRESH
+		      },targetEntity = Tag.class)
 	@JoinTable(name="jatyproducttotag",
-		joinColumns = 			{@JoinColumn(name="productid", 	referencedColumnName="id")},
-		inverseJoinColumns = 	{@JoinColumn(name="tagid", 		referencedColumnName="id")})
+		joinColumns = {@JoinColumn(name="productid", referencedColumnName="id",nullable=false, updatable=false)},
+		inverseJoinColumns = {@JoinColumn(name="tagid", referencedColumnName="id",nullable=false,updatable=false)},
+		foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+		inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
 	private Set<Tag>tags;
 	
 	public Product() {

@@ -87,14 +87,6 @@ public class ProductService {
 	public void saveProduct(Product product) {
 		this.productRepository.save(product);
 	}
-
-	public void saveTag(Product product, Tag tag) {
-		Product p=this.productRepository.findById(product.getId());
-		Tag t=this.tagRepository.findById(tag.getId());
-		if(p==null||t==null)return;
-		p.addTag(t);
-		saveProduct(p);
-	}
 	
 	public void saveTags(Product product, List<Tag>tags) {		
 		//confirm product exists
@@ -114,6 +106,21 @@ public class ProductService {
 	
 	public void deleteProduct(Product product) {
 		this.productRepository.delete(product);
+	}
+	
+	public void deleteTags(Product product, List<Tag>tags) {
+		//confirm product exists
+		Product p=this.productRepository.findById(product.getId());
+		if(p==null)return;
+		//adding in the individual tags one by one
+		for(Tag tag:tags) {
+			//confirm tag is not null
+			if(tag==null)continue;
+			//remove tag's relationship with product
+			p.removeTag(tag.getId());
+		}
+		//save changes
+		saveProduct(p);					
 	}
 	
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
-import com.jaty.models.utils.ProductToTag;
 import com.jaty.models.utils.ProductToTags;
 import com.jaty.service.ProductService;
 
@@ -89,23 +88,10 @@ public class ProductController {
 	public void save(@RequestBody Product product) {
 		this.productService.saveProduct(product);
 	}
-
-	/**
-	 * Adds 1 tag to a product. Has largely become irrelevant due to saveTags().
-	 * However, the ProductToTag module is a fully functional model 
-	 * unlike ProductToTags which doesn't map to any table
-	 * so I'm going to leave this one in for now.
-	 * @param pt check the producttotag module for the request body json. 
-	 * The product and tag must contain an id that matches those in the table
-	 */
-	@RequestMapping(path="/save/tag", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveTag(@RequestBody ProductToTag pt) {
-		this.productService.saveTag(pt.getProduct(),pt.getTag());
-	}		
 	
 	/**
 	 * Adds a list of tags to a product
-	 * @param pt See the ProductToTags module for json representation.
+	 * @param pt See the ProductToTags in models.utils for json representation.
 	 * It only checks ids for the product and tags.
 	 */
 	@RequestMapping(path="/save/tags", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -114,12 +100,27 @@ public class ProductController {
 	}		
 
 	/**
-	 * Deletes a product. Will also handle removing its producttotag relationships.
+	 * Deletes a product from the database. Will also handle removing its producttotag relationships.
 	 * @param product A product object. JPA only requires an id for JSON.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteProduct(@RequestBody Product product) {
 		this.productService.deleteProduct(product);
 	}		
+	
+	/**
+	 * removes tags from a product. 
+	 * This means removing tag asdf1 from a product with tags
+	 * asdf1 and asdf2 as represented on producttotag will leave
+	 * the product with only the tag asdf2.
+	 * @param pt See the ProductToTags in models.utils for json representation.
+	 * It only checks ids for the product and tags.
+	 */
+	@RequestMapping(path="/delete/tags", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteTags(@RequestBody ProductToTags pt) {
+		this.productService.deleteTags(pt.getProduct(),pt.getTags());
+	}		
+	
+	
 }
 
