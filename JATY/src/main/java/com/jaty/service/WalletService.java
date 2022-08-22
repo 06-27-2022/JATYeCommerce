@@ -1,10 +1,14 @@
 package com.jaty.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jaty.models.Account;
 import com.jaty.models.Wallet;
+import com.jaty.repository.AccountRepository;
 import com.jaty.repository.WalletRepository;
 
 @Service("jatyWalletService")
@@ -12,6 +16,9 @@ public class WalletService {
 
 	@Autowired
 	private WalletRepository walletRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 
 	public WalletService() {}
 	
@@ -23,7 +30,20 @@ public class WalletService {
 		this.walletRepository.save(wallet);
 	}
 	
-	public Wallet getWalletByAccount(Account account) {
-		return this.walletRepository.findByAccountId(account);
+	public Wallet getWalletByAccount(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+		Account accountSearch = this.accountRepository.findById((int) session.getAttribute("accountId"));	
+		return this.walletRepository.findByAccountId(accountSearch);
+		}
+		return null;
+		
+	}
+	
+	public String editWalletBalance(double edit, HttpServletRequest request) {
+		Wallet targetWallet = getWalletByAccount(request);
+		targetWallet.setBalance(targetWallet.getBalance() + edit);
+		this.walletRepository.save(targetWallet);
+		return "new-wallet-balance: " + targetWallet.getBalance();
 	}
 }

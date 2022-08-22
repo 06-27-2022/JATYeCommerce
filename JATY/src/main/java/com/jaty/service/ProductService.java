@@ -4,14 +4,20 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
 import com.jaty.models.Tag;
+import com.jaty.models.Wallet;
+import com.jaty.repository.AccountRepository;
 import com.jaty.repository.ProductRepository;
 import com.jaty.repository.TagRepository;
+import com.jaty.repository.WalletRepository;
 
 @Service("jatyProductService")
 public class ProductService {
@@ -21,6 +27,12 @@ public class ProductService {
 	
 	@Autowired
 	private TagRepository tagRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	@Autowired
+	private WalletRepository walletRepository;
 	
 	public ProductService() {}
 	
@@ -110,5 +122,33 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+	}
+	
+	public String buyProduct(int id, HttpServletRequest request) {
+		//Check if client is logged in for buying
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			//Retrieve product for purchase, account of buyer, and the buyer's wallet
+			Product purchase = getProductById(id);
+			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
+			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() > 0) {
+				//If buyer balance or purchase is out of stock then no further logic is done
+				//This can be broken down to give more details to client
+				return "cannot-afford-product-or-out-of-stock";
+			}else {
+				//Update buyer balance, purchase stock and seller balance after successful purchase
+				buyerWallet.setBalance(buyerWallet.getBalance()-purchase.getPrice());
+				purchase.setStock(purchase.getStock()-1);
+				walletRepository.save(buyerWallet);
+				saveProduct(purchase);
+				Wallet sellerWallet = walletRepository.findByAccountId(purchase.getAccountId());
+				sellerWallet.setBalance(sellerWallet.getBalance()+purchase.getPrice());
+				walletRepository.save(sellerWallet);
+				return "product-bought";
+			}
+			
+		}
+		//If client is not logged in they are informed
+		return "not-logged-in";
 	}
 }
