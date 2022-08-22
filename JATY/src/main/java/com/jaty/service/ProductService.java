@@ -4,14 +4,20 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
 import com.jaty.models.Tag;
+import com.jaty.models.Wallet;
+import com.jaty.repository.AccountRepository;
 import com.jaty.repository.ProductRepository;
 import com.jaty.repository.TagRepository;
+import com.jaty.repository.WalletRepository;
 
 @Service("jatyProductService")
 public class ProductService {
@@ -21,6 +27,12 @@ public class ProductService {
 	
 	@Autowired
 	private TagRepository tagRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	@Autowired
+	private WalletRepository walletRepository;
 	
 	public ProductService() {}
 	
@@ -110,5 +122,26 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+	}
+	
+	public String buyProduct(int id, HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		Product purchase = getProductById(id);
+		if(session != null) {
+			session = request.getSession();
+			Account buyer = this.accountRepository.findById((int) session.getAttribute("accountId"));
+			Wallet buyerWallet = this.walletRepository.findByAccountId(buyer);
+			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() > 0) {
+				return "cannot-afford-product-or-out-of-stock";
+			}else {
+				buyerWallet.setBalance(buyerWallet.getBalance()-purchase.getPrice());
+				purchase.setStock(purchase.getStock()-1);
+				walletRepository.save(buyerWallet);
+				saveProduct(purchase);
+				return "product-bought";
+			}
+			
+		}
+		return "not-logged-in";
 	}
 }
