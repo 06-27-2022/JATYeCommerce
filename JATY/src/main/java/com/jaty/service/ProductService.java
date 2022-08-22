@@ -125,23 +125,30 @@ public class ProductService {
 	}
 	
 	public String buyProduct(int id, HttpServletRequest request) {
+		//Check if client is logged in for buying
 		HttpSession session = request.getSession(false);
-		Product purchase = getProductById(id);
 		if(session != null) {
-			session = request.getSession();
-			Account buyer = this.accountRepository.findById((int) session.getAttribute("accountId"));
-			Wallet buyerWallet = this.walletRepository.findByAccountId(buyer);
+			//Retrieve product for purchase, account of buyer, and the buyer's wallet
+			Product purchase = getProductById(id);
+			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
 			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() > 0) {
+				//If buyer balance or purchase is out of stock then no further logic is done
+				//This can be broken down to give more details to client
 				return "cannot-afford-product-or-out-of-stock";
 			}else {
+				//Update buyer balance and purchase stock
 				buyerWallet.setBalance(buyerWallet.getBalance()-purchase.getPrice());
 				purchase.setStock(purchase.getStock()-1);
 				walletRepository.save(buyerWallet);
 				saveProduct(purchase);
+				Wallet sellerWallet = walletRepository.findByAccountId(purchase.getAccountId());
+				sellerWallet.setBalance(sellerWallet.getBalance()+purchase.getPrice());
+				walletRepository.save(sellerWallet);
 				return "product-bought";
 			}
 			
 		}
+		//If client is not logged in they are informed
 		return "not-logged-in";
 	}
 }
