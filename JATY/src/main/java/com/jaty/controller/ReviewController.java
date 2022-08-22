@@ -1,7 +1,10 @@
 package com.jaty.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,5 +28,9 @@ public class ReviewController {
 	public void create(@RequestBody Review review) {
 		this.reviewService.save(review);
 	}
-
+	
+	@RequestMapping(path="/{productid}/add", consumes=MediaType.APPLICATION_JSON_VALUE)
+	public String addReviewToProduct(@PathVariable int productid, @RequestBody Review review, HttpServletRequest request) {
+		return this.reviewService.createReviewForProduct(productid, review, request);
+	}
 }
