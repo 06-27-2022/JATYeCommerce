@@ -92,6 +92,10 @@ public class ProductService {
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
 		if(p==null)return;
+
+		System.out.println("before");
+		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
+
 		//adding in the individual tags one by one
 		for(Tag tag:tags) {
 			//confirm tag exists
@@ -100,6 +104,9 @@ public class ProductService {
 			//add tag to product
 			p.addTag(t);
 		}
+
+		System.out.println("after");
+		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
 		//save changes
 		saveProduct(p);					
 	}
@@ -122,5 +129,4 @@ public class ProductService {
 		//save changes
 		saveProduct(p);					
 	}
-	
 }
