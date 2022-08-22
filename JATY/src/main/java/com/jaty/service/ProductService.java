@@ -41,7 +41,7 @@ public class ProductService {
 	}
 	
 	public List<Product> getProductByName(String productname){
-		return this.productRepository.findByNameStartingWith(productname);
+		return this.productRepository.findByNameStartingWithIgnoreCase(productname);
 	}
 	
 	public List<Product> getProductByTagsName(List<String> tagnames) {
@@ -99,26 +99,44 @@ public class ProductService {
 	public void saveProduct(Product product) {
 		this.productRepository.save(product);
 	}
-
-	public void saveTag(Product product, Tag tag) {
-		Product p=productRepository.findById(product.getId());
-		Tag t=tagRepository.findById(tag.getId());
-		if(p==null||t==null)return;
-		p.addTag(t);
-		saveProduct(p);
-	}
 	
 	public void saveTags(Product product, List<Tag>tags) {		
 		//confirm product exists
-		Product p=productRepository.findById(product.getId());
+		Product p=this.productRepository.findById(product.getId());
 		if(p==null)return;
+
+		System.out.println("before");
+		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
+
 		//adding in the individual tags one by one
 		for(Tag tag:tags) {
 			//confirm tag exists
-			Tag t=tagRepository.findById(tag.getId());
+			Tag t=this.tagRepository.findById(tag.getId());
 			if(t==null)continue;
 			//add tag to product
 			p.addTag(t);
+		}
+
+		System.out.println("after");
+		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
+		//save changes
+		saveProduct(p);					
+	}
+	
+	public void deleteProduct(Product product) {
+		this.productRepository.delete(product);
+	}
+	
+	public void deleteTags(Product product, List<Tag>tags) {
+		//confirm product exists
+		Product p=this.productRepository.findById(product.getId());
+		if(p==null)return;
+		//adding in the individual tags one by one
+		for(Tag tag:tags) {
+			//confirm tag is not null
+			if(tag==null)continue;
+			//remove tag's relationship with product
+			p.removeTag(tag.getId());
 		}
 		//save changes
 		saveProduct(p);					

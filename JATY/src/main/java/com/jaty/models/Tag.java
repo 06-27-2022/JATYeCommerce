@@ -51,10 +51,11 @@ public class Tag {
 	
 	@ManyToMany(fetch = FetchType.LAZY,
 		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "tags")
+			          CascadeType.DETACH,
+			          CascadeType.MERGE,
+			          CascadeType.PERSIST,
+			          CascadeType.REFRESH
+		      },targetEntity = Product.class,mappedBy="tags")
 	@JsonIgnore	
 	private Set<Product>products;
 	

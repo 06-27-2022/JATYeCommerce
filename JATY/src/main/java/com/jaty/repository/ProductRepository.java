@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
+import com.jaty.models.Tag;
 
 @Repository("jatyProductRepository")
 public interface ProductRepository extends JpaRepository<Product, Integer>{
@@ -14,10 +15,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	
 	Product findById(int id);
 	
-	List<Product> findByNameStartingWith(String productname);
+	List<Product> findByNameStartingWithIgnoreCase(String productname);
 	
+	List<Product> findDistinctByTags(Tag tag);
 	List<Product> findDistinctByTagsTagIn(List<String>tagnames);
 	
 	List<Product> findByAccountid(Account account);
 
+	void delete(Product product);
+	
 }
