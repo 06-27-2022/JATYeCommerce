@@ -38,4 +38,9 @@ public class WalletController {
 	public Wallet checkWallet(HttpServletRequest request) {
 		return this.walletService.getWalletByAccount(request);
 	}
+	
+	@RequestMapping(path="/account/adjustfunds")
+	public String adjustBalance(@RequestParam double input, HttpServletRequest request) {
+		return this.walletService.editWalletBalance(input, request);
+	}
 }

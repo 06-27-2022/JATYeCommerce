@@ -136,7 +136,7 @@ public class ProductService {
 				//This can be broken down to give more details to client
 				return "cannot-afford-product-or-out-of-stock";
 			}else {
-				//Update buyer balance and purchase stock
+				//Update buyer balance, purchase stock and seller balance after successful purchase
 				buyerWallet.setBalance(buyerWallet.getBalance()-purchase.getPrice());
 				purchase.setStock(purchase.getStock()-1);
 				walletRepository.save(buyerWallet);
