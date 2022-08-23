@@ -1,5 +1,7 @@
 package com.jaty.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -42,5 +44,9 @@ public class ReviewService {
 			return "review-created-for:"+review.getProductId().getName()+" by "+review.getAccountId().getUsername();			
 		}
 		return "not-loged-in";
+	}
+	
+	public List<Review> findAllReviewsByProductId(int productid){
+		return this.reviewRepository.findByProductId(this.productRepository.findById(productid));
 	}
 }
