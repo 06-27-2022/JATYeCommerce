@@ -149,7 +149,7 @@ public class ProductService {
 			//Retrieve product for purchase, account of buyer, and the buyer's wallet
 			Product purchase = getProductById(id);
 			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
-			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() > 0) {
+			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() < 0) {
 				//If buyer balance or purchase is out of stock then no further logic is done
 				//This can be broken down to give more details to client
 				return "cannot-afford-product-or-out-of-stock";
@@ -169,4 +169,49 @@ public class ProductService {
 		//If client is not logged in they are informed
 		return "not-logged-in";
 	}
+	
+	public String adjustProductStock(int id, int adjustment,HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			Product target = getProductById(id);
+			if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+			target.setStock(target.getStock()+adjustment);
+			saveProduct(target);
+			return "stock-adjusted-to: "+target.getStock();	
+			}
+			return "do-not-have-permission";
+		}
+		return "not-logged-in";
+	}
+	
+	public String overwriteProductPrice(int id, int adjustment,HttpServletRequest request) {
+			
+			HttpSession session = request.getSession(false);
+			if(session != null) {
+				Product target = getProductById(id);
+				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+				target.setPrice(adjustment);
+				saveProduct(target);
+				return "price-adjusted-to: "+target.getPrice();	
+				}
+				return "do-not-have-permission";
+			}
+			return "not-logged-in";
+		}	
+	
+	public String overwriteProductDescription(int id, String edit,HttpServletRequest request) {
+			
+			HttpSession session = request.getSession(false);
+			if(session != null) {
+				Product target = getProductById(id);
+				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+				target.setDescription(edit);
+				saveProduct(target);
+				return "description-edited-to: "+target.getDescription();	
+				}
+				return "do-not-have-permission";
+			}
+			return "not-logged-in";
+		}
 }

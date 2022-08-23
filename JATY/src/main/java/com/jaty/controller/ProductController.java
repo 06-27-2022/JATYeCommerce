@@ -101,6 +101,16 @@ public class ProductController {
 	public void saveTags(@RequestBody ProductToTags pt) {
 		this.productService.saveTags(pt.getProduct(),pt.getTags());
 	}
+	
+	/**
+	 * Retrieves product id from path URL and account id from the HttpSession which will be used to
+	 * retrieve the buyer wallet. Checks to see if the buyer can afford the product; if they can 
+	 * afford it the price is removed from their balance, added to the product owner's balance and
+	 * the product's stock is reduced by 1.
+	 * @param id of product to be purchased
+	 * @param request contains the account id of the buyer
+	 * @return modifications to the buyer wallet, seller wallet and purchased product in the database.
+	 */
 	@RequestMapping(path="/{id}/buy")
 	public String buyProduct(@PathVariable int id, HttpServletRequest request) {
 		return this.productService.buyProduct(id, request);
@@ -127,5 +137,47 @@ public class ProductController {
 	public void deleteTags(@RequestBody ProductToTags pt) {
 		this.productService.deleteTags(pt.getProduct(),pt.getTags());
 	}		
+	
+	/**
+	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
+	 * permissions are retrieved from the HttpSession. This particular end-point edits the stock of a
+	 * product.
+	 * @param id of product to be edited
+	 * @param adjustment 
+	 * @param request contains the account id need to determine permissions
+	 * @return modifications to the selected product in the database. 
+	 */
+	@RequestMapping(path="/{id}/adjuststock")
+	public String adjustStock(@PathVariable int id, @RequestParam int adjustment, HttpServletRequest request) {
+		return this.productService.adjustProductStock(id, adjustment, request);
+	}
+	
+	/**
+	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
+	 * permissions are retrieved from the HttpSession. This particular end-point edits the price of a
+	 * product.
+	 * @param id of product to be edited
+	 * @param adjustment 
+	 * @param request contains the account id need to determine permissions
+	 * @return modifications to the selected product in the database. 
+	 */
+	@RequestMapping(path="/{id}/adjustprice")
+	public String adjustPrice(@PathVariable int id, @RequestParam int adjustment, HttpServletRequest request) {
+		return this.productService.overwriteProductPrice(id, adjustment, request);
+	}
+	
+	/**
+	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
+	 * permissions are retrieved from the HttpSession. This particular end-point edits the description
+	 * of a product.
+	 * @param id of product to be edited
+	 * @param edit 
+	 * @param request contains the account id need to determine permissions
+	 * @return modifications to the selected product in the database. 
+	 */
+	@RequestMapping(path="/{id}/adjustdescription")
+	public String adjustDescription(@PathVariable int id, @RequestParam String edit, HttpServletRequest request) {
+		return this.productService.overwriteProductDescription(id, edit, request);
+	}
 }
 
