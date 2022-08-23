@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jaty.models.Account;
 import com.jaty.models.Product;
-import com.jaty.models.utils.ProductToTags;
 import com.jaty.service.ProductService;
 
 /**
@@ -29,10 +27,17 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
+			
+	/**
+	 * Creates a new product in the database
+	 * @param product a product model. id and account id will be ignored.
+	 * @param request httpservletrequest, used for getting session information.
+	 */
+	@RequestMapping(path="/create")
+	public void createProduct(@RequestBody Product product, HttpServletRequest request) {
+		this.productService.createProduct(product, request);
+	}	
 	
-	@Autowired
-	Logger log;
-		
 	/**
 	 * Search for a product with a matching id
 	 * @param id a request parameter "id" with an integer value
@@ -62,11 +67,11 @@ public class ProductController {
 	 * Products with banned tags will not be included in the returned products.
 	 * Is case sensitive because the In keyword used in query methods is 
 	 * incompatible with the IgnoreCase keyword.
-	 * @param tagnames a list of strings such as [asdf1,asdf2] 
+	 * @param tagnames a list of strings such as asdf1,asdf2
 	 * @return a list of products with no duplicates with all requested tags
 	 */
 	@RequestMapping(path="/search/tagnames")
-	public List<Product> getByTagName(@RequestBody List<String> tagnames) {
+	public List<Product> getByTagName(@RequestParam List<String> tagnames) {
 		return this.productService.getProductByTagsName(tagnames);
 	}
 	
@@ -79,28 +84,20 @@ public class ProductController {
 	public List<Product> getByAccount(@RequestBody Account account) {
 		return this.productService.getProductByAccount(account);
 	}
-	
+
 	/**
-	 * saves the product to the database.
-	 * AccountId is currently manually included with the inputed json
-	 * will need to leech off the account's httpsession for the accountid
-	 * Currently is incapable of being passed with its tags. 
-	 * @param product A Product Object.
+	 * Updates a product. Will overwrite everything except id and accountid.
+	 * This includes productotag relationships. If nothing or null is passed,
+	 * then the data in the database will not be overwritten.
+	 * @param product the product being overwritten with its new attributes. Minimum
+	 * requirement is the id so the product can be identified in the database.
+	 * @param request used to find the session account.
 	 */
-	@RequestMapping(path="/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void save(@RequestBody Product product) {
-		this.productService.saveProduct(product);
-	}
-	
-	/**
-	 * Adds a list of tags to a product
-	 * @param pt See the ProductToTags in models.utils for json representation.
-	 * It only checks ids for the product and tags.
-	 */
-	@RequestMapping(path="/save/tags", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveTags(@RequestBody ProductToTags pt) {
-		this.productService.saveTags(pt.getProduct(),pt.getTags());
-	}
+	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void updateProduct(@RequestBody Product product, HttpServletRequest request) {
+		this.productService.updateProduct(product, request);
+	}	
+		
 	@RequestMapping(path="/{id}/buy")
 	public String buyProduct(@PathVariable int id, HttpServletRequest request) {
 		return this.productService.buyProduct(id, request);
@@ -115,17 +112,5 @@ public class ProductController {
 		this.productService.deleteProduct(product);
 	}		
 	
-	/**
-	 * removes tags from a product. 
-	 * This means removing tag asdf1 from a product with tags
-	 * asdf1 and asdf2 as represented on producttotag will leave
-	 * the product with only the tag asdf2.
-	 * @param pt See the ProductToTags in models.utils for json representation.
-	 * It only checks ids for the product and tags.
-	 */
-	@RequestMapping(path="/delete/tags", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteTags(@RequestBody ProductToTags pt) {
-		this.productService.deleteTags(pt.getProduct(),pt.getTags());
-	}		
 }
 

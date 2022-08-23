@@ -62,6 +62,16 @@ public class Account {
 	@Column(name="state")
 	private String state;
 	
+	/**
+	 * string for default role
+	 */
+	public static final String DEFAULT="default";
+	/**
+	 * string for moderator role
+	 */
+	public static final String MODERATOR="moderator";
+	
+	
 	//constructors for jatyAccount
 	
 	public Account() {
