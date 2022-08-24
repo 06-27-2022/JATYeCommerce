@@ -34,8 +34,8 @@ public class ProductController {
 	 * @param request httpservletrequest, used for getting session information.
 	 */
 	@RequestMapping(path="/create")
-	public void createProduct(@RequestBody Product product, HttpServletRequest request) {
-		this.productService.createProduct(product, request);
+	public boolean createProduct(@RequestBody Product product, HttpServletRequest request) {
+		return this.productService.createProduct(product, request);
 	}	
 	
 	/**
@@ -94,8 +94,8 @@ public class ProductController {
 	 * @param request used to find the session account.
 	 */
 	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void updateProduct(@RequestBody Product product, HttpServletRequest request) {
-		this.productService.updateProduct(product, request);
+	public boolean updateProduct(@RequestBody Product product, HttpServletRequest request) {
+		return this.productService.updateProduct(product, request);
 	}	
 		
 	@RequestMapping(path="/{id}/buy")
@@ -108,8 +108,8 @@ public class ProductController {
 	 * @param product A product object. JPA only requires an id for JSON.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteProduct(@RequestBody Product product) {
-		this.productService.deleteProduct(product);
+	public boolean deleteProduct(@RequestBody Product product) {
+		return this.productService.deleteProduct(product);
 	}		
 	
 }

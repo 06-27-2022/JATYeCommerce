@@ -101,7 +101,7 @@ public class Tag {
 		this.tag = tag;
 	}
 
-	public boolean isBan() {
+	public boolean getBan() {
 		return ban;
 	}
 

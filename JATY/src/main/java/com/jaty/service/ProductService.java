@@ -38,6 +38,11 @@ public class ProductService {
 	
 	public ProductService() {}
 
+	/**
+	 * gets the account currently logged in
+	 * @param request
+	 * @return
+	 */
 	private Account getSessionAccount(HttpServletRequest request) {
 		return this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
 	}
@@ -50,11 +55,11 @@ public class ProductService {
 	private boolean isBan(Product product) {
 		Tag[]tags=product.getTags().toArray(new Tag[] {});
 		Arrays.sort(tags,(t1,t2)->{
-			int a=t1.isBan()?0:1;
-			int b=t2.isBan()?0:1;
+			int a=t1.getBan()?0:1;
+			int b=t2.getBan()?0:1;
 			return a-b;
 		});
-		return tags[0].isBan();
+		return tags[0].getBan();
 	}
 
 	/**
@@ -75,15 +80,15 @@ public class ProductService {
 		return false;
 	}
 
-	public void createProduct(Product product, HttpServletRequest request) {
+	public boolean createProduct(Product product, HttpServletRequest request) {
 		//Check if client is logged in
 		Account a=getSessionAccount(request);
-		if(a == null||product==null) return;
+		if(a == null||product==null) return false;
 
 		product.setId(0);
 		product.setAccountId(a);
 		this.productRepository.save(product);
-		System.out.println("asdf");
+		return true;
 	}
 	
 	public Product getProductById(int id) {
@@ -113,12 +118,18 @@ public class ProductService {
 		return this.productRepository.findByAccountid(account);
 	}
 
-	public void updateProduct(Product product, HttpServletRequest request) {
-		//confirm login and product exists
+	public boolean updateProduct(Product product, HttpServletRequest request) {
+		//confirm login 
 		Account a=getSessionAccount(request);
+		if(a==null)return false;		
+		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
-		//if the product is missing or you don't own the product and you're a default account
-		if(p==null||(p.getAccountId().getId()!=a.getId()&&a.getRole().equalsIgnoreCase(Account.DEFAULT)))return;
+		//if the product exists
+		if(p==null)return false;
+		//check if you own the product
+		if(p.getAccountId().getId()!=a.getId())return false;
+		//if you logged into a moderator
+		if(!a.getRole().equalsIgnoreCase(Account.MODERATOR))return false;
 		//overwriting product's attributes, excluding its id and accountid
 		if(product.getDescription()!=null)p.setDescription(product.getDescription());
 		if(product.getName()!=null)p.setName(product.getName());
@@ -138,16 +149,18 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+		return true;
 	}
 	
-	public void saveProduct(Product product) {
+	private boolean saveProduct(Product product) {
 		this.productRepository.save(product);
+		return true;
 	}
 	
-	public void saveTags(Product product, List<Tag>tags) {		
+	public boolean saveTags(Product product, List<Tag>tags) {		
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
-		if(p==null)return;
+		if(p==null)return false;
 		//adding in the individual tags one by one
 		for(Tag tag:tags) {
 			//confirm tag exists
@@ -158,16 +171,18 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+		return true;
 	}
 	
-	public void deleteProduct(Product product) {
+	public boolean deleteProduct(Product product) {
 		this.productRepository.delete(product);
+		return true;
 	}
 	
-	public void deleteTags(Product product, List<Tag>tags) {
+	public boolean deleteTags(Product product, List<Tag>tags) {
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
-		if(p==null)return;
+		if(p==null)return false;
 		//adding in the individual tags one by one
 		for(Tag tag:tags) {
 			//confirm tag is not null
@@ -177,6 +192,7 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+		return true;
 	}
 	
 	public String buyProduct(int id, HttpServletRequest request) {
