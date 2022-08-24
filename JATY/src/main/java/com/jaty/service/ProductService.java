@@ -44,7 +44,16 @@ public class ProductService {
 	 * @return
 	 */
 	private Account getSessionAccount(HttpServletRequest request) {
-		return this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
+		try{
+			return this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
+		}catch(NullPointerException e) {
+			return null;
+		}
+	}
+	private boolean permission(Account a, Product p) {
+		if(p.getAccountId().getId()!=a.getId()&&!a.getRole().equalsIgnoreCase(Account.MODERATOR))
+			return false;
+		return true;
 	}
 	
 	/**
@@ -87,6 +96,18 @@ public class ProductService {
 
 		product.setId(0);
 		product.setAccountId(a);
+		//confirm the tags provided exist
+		if(product.getTags()!=null) {
+			Set<Tag>tags=new HashSet<Tag>();
+			for(Tag tag:product.getTags()) {
+				//confirm tag exists
+				Tag t=this.tagRepository.findById(tag.getId());
+				if(t==null)continue;
+				//add tag to product
+				tags.add(t);
+			}
+			product.setTags(tags);
+		}
 		this.productRepository.save(product);
 		return true;
 	}
@@ -118,18 +139,16 @@ public class ProductService {
 		return this.productRepository.findByAccountid(account);
 	}
 
-	public boolean updateProduct(Product product, HttpServletRequest request) {
+	public String updateProduct(Product product, HttpServletRequest request) {
 		//confirm login 
 		Account a=getSessionAccount(request);
-		if(a==null)return false;		
+		if(a==null)return "not-logged-in";		
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
-		//if the product exists
-		if(p==null)return false;
-		//check if you own the product
-		if(p.getAccountId().getId()!=a.getId())return false;
-		//if you logged into a moderator
-		if(!a.getRole().equalsIgnoreCase(Account.MODERATOR))return false;
+		if(p==null)return "product-does-not-exist";
+		//check if you own the product or you're a moderator
+		if(!permission(a,p))
+			return "you-do-not-own-this-product";
 		//overwriting product's attributes, excluding its id and accountid
 		if(product.getDescription()!=null)p.setDescription(product.getDescription());
 		if(product.getName()!=null)p.setName(product.getName());
@@ -149,7 +168,7 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
-		return true;
+		return "success";
 	}
 	
 	private boolean saveProduct(Product product) {
@@ -174,7 +193,11 @@ public class ProductService {
 		return true;
 	}
 	
-	public boolean deleteProduct(Product product) {
+	public boolean deleteProduct(Product product, HttpServletRequest request) {
+		Account acc=getSessionAccount(request);
+		if(acc==null)return false;
+		Product p=getProductById(product.getId());
+		if(!permission(acc,p))return false;
 		this.productRepository.delete(product);
 		return true;
 	}
@@ -202,7 +225,7 @@ public class ProductService {
 			//Retrieve product for purchase, account of buyer, and the buyer's wallet
 			Product purchase = getProductById(id);
 			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
-			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() > 0) {
+			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() < 0) {
 				//If buyer balance or purchase is out of stock then no further logic is done
 				//This can be broken down to give more details to client
 				return "cannot-afford-product-or-out-of-stock";
@@ -222,4 +245,49 @@ public class ProductService {
 		//If client is not logged in they are informed
 		return "not-logged-in";
 	}
+	
+	public String adjustProductStock(int id, int adjustment,HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			Product target = getProductById(id);
+			if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+			target.setStock(target.getStock()+adjustment);
+			saveProduct(target);
+			return "stock-adjusted-to: "+target.getStock();	
+			}
+			return "do-not-have-permission";
+		}
+		return "not-logged-in";
+	}
+	
+	public String overwriteProductPrice(int id, int adjustment,HttpServletRequest request) {
+			
+			HttpSession session = request.getSession(false);
+			if(session != null) {
+				Product target = getProductById(id);
+				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+				target.setPrice(adjustment);
+				saveProduct(target);
+				return "price-adjusted-to: "+target.getPrice();	
+				}
+				return "do-not-have-permission";
+			}
+			return "not-logged-in";
+		}	
+	
+	public String overwriteProductDescription(int id, String edit,HttpServletRequest request) {
+			
+			HttpSession session = request.getSession(false);
+			if(session != null) {
+				Product target = getProductById(id);
+				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
+				target.setDescription(edit);
+				saveProduct(target);
+				return "description-edited-to: "+target.getDescription();	
+				}
+				return "do-not-have-permission";
+			}
+			return "not-logged-in";
+		}
 }

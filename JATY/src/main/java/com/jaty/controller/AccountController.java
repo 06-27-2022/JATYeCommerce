@@ -61,7 +61,7 @@ public class AccountController {
 	}
 	
 	/**
-	 * From the client receives an account json containing login necessary information, checks it
+	 * Retrieves a json containing login necessary information, checks it
 	 * against database records to determine access and gives client a HttpSession for further 
 	 * site navigation.
 	 * @param account object should have both the username and password as strings in the json.
@@ -84,9 +84,9 @@ public class AccountController {
 	}
 	
 	/**
-	 * From the client receives an account json containing account necessary information, checks it
+	 * Retrieves a json containing account necessary information, checks it
 	 * against database records to determine validity, modifies the database appropriately in both
-	 * the jatyAccount & jatyWallet tables and provides an HttpSession similar to the logIn method. 
+	 * the jatyAccount & jatyWallet tables and provides an HttpSession similar to the logIn end-point. 
 	 * @param account object should have both the username, password, city and state as strings in the json.
 	 * @param request holds the HttpSession.
 	 * @return HttpSession with accountId and accountRole attributes.
