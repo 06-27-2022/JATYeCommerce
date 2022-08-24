@@ -1,5 +1,6 @@
 package com.jaty.controller;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,6 +100,22 @@ public class ProductController {
 	public String updateProduct(@RequestBody Product product, HttpServletRequest request) {
 		return this.productService.updateProduct(product, request);
 	}	
+	
+	/**
+	 * Uploads a png file to the bucket. The file should be sent as a binary.
+	 * @param id The id of the product the picture is attached to
+	 * @param in an inputstream object. 
+	 * According to postman, this is sent as a binary.
+	 * The binary is not recognized as part of the RequestBody but it does
+	 * occupy the body tab in postman.
+	 * @param request used to check session information
+	 * @return string describing success or failure
+	 */
+	@RequestMapping(path="/update/picture")
+	public String updateProduct(@RequestParam int id, InputStream in, HttpServletRequest request) {
+		return this.productService.updatePicture(id,in,request);
+	}	
+	
 	
 	/**
 	 * Retrieves product id from path URL and account id from the HttpSession which will be used to
