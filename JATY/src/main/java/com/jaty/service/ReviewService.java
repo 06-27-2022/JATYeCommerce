@@ -38,7 +38,7 @@ public class ReviewService {
 	}
 	
 	public String createReviewForProduct(int productid, Review review, HttpServletRequest request) {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		if(session != null) {
 			Account reviewer = this.accountRepository.findById((int)session.getAttribute("accountId"));
 			Product target = this.productRepository.findById(productid);
@@ -46,7 +46,7 @@ public class ReviewService {
 				review.setProductId(target);
 				review.setAccountId(reviewer);
 				save(review);
-				return "review-created-for:"+review.getProductId().getName()+" by "+review.getAccountId().getUsername();
+				return "review-created-for: "+review.getProductId().getName()+" by "+review.getAccountId().getUsername();
 			}
 			return "can-not-add-review-to-this-product";
 		}
