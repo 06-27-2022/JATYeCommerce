@@ -32,6 +32,7 @@ public class ProductController {
 	 * Creates a new product in the database
 	 * @param product a product model. id and account id will be ignored.
 	 * @param request httpservletrequest, used for getting session information.
+	 * @return true if the product is created in the database
 	 */
 	@RequestMapping(path="/create")
 	public boolean createProduct(@RequestBody Product product, HttpServletRequest request) {
@@ -92,6 +93,7 @@ public class ProductController {
 	 * @param product the product being overwritten with its new attributes. Minimum
 	 * requirement is the id so the product can be identified in the database.
 	 * @param request used to find the session account.
+	 * @return a string describing how the update failed or if it succeeded.
 	 */
 	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String updateProduct(@RequestBody Product product, HttpServletRequest request) {
@@ -115,6 +117,7 @@ public class ProductController {
 	/**
 	 * Deletes a product from the database. Will also handle removing its producttotag relationships.
 	 * @param product A product object. JPA only requires an id for JSON.
+	 * @return true if the product was deleted from the database.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public boolean deleteProduct(@RequestBody Product product, HttpServletRequest request) {
