@@ -10,6 +10,7 @@ import {UserProfile} from './App';
 import {ItemEditor} from './App';
 import {ProductPage} from './App';
 import {PersonalItemPage} from './App';
+import { Sponsors } from './App';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,6 +25,7 @@ root.render(
             <Route path="/ItemEditor" element={<ItemEditor/>}/>
             <Route path="/ProductPage" element={<ProductPage/>}/>
             <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>
+            <Route path="/sponsors" element={<Sponsors/>}/>
             </Routes>
             </BrowserRouter>
     </div>

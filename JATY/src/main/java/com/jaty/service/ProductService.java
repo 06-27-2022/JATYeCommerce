@@ -1,8 +1,10 @@
 package com.jaty.service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,44 +37,48 @@ public class ProductService {
 	private WalletRepository walletRepository;
 	
 	public ProductService() {}
-	
-	public Product getProductById(int id) {
-		return this.productRepository.findById(id);
-	}
-	
-	public List<Product> getProductByName(String productname){
-		return this.productRepository.findByNameStartingWithIgnoreCase(productname);
-	}
-	
-	public List<Product> getProductByTagsName(List<String> tagnames) {
-		List<Product>allproducts=this.productRepository.findDistinctByTagsTagIn(tagnames);
-		List<Product>products=new LinkedList<Product>();
-		for(Product p:allproducts) {
-			//if the product is banned, we skip to the next product
-			if(isBan(p)) {continue;}
 
-			//check if the product has all the requested tags
-			if(containsTagnames(p, tagnames))
-				products.add(p);
+	/**
+	 * gets the account currently logged in
+	 * @param request
+	 * @return
+	 */
+	private Account getSessionAccount(HttpServletRequest request) {
+		try{
+			return this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
+		}catch(NullPointerException e) {
+			return null;
 		}
-		return products;
 	}
-	
+	/**
+	 * checks if the account id matches the product's accountid.
+	 * Otherwise, checks if the account's role is moderator.
+	 * @param a account object with an id. Should be obtained from session data
+	 * @param p product object with an id. Should be a product in the database.
+	 * @return true if you have permission to access the product
+	 */
+	private boolean permission(Account a, Product p) {
+		if(a==null||p==null)return false;
+		if(p.getAccountId().getId()!=a.getId()&&!a.getRole().equalsIgnoreCase(Account.MODERATOR))
+			return false;
+		return true;
+	}
 	
 	/**
 	 * checks if the product contains any banned tags
 	 * @param product
 	 * @return true if the product has any banned tags
 	 */
-	private boolean isBan(Product product) {
+	private boolean isBanned(Product product) {
 		Tag[]tags=product.getTags().toArray(new Tag[] {});
 		Arrays.sort(tags,(t1,t2)->{
-			int a=t1.isBan()?0:1;
-			int b=t2.isBan()?0:1;
+			int a=t1.getBan()?0:1;
+			int b=t2.getBan()?0:1;
 			return a-b;
 		});
-		return tags[0].isBan();
+		return tags[0].getBan();
 	}
+
 	/**
 	 * Checks if product p contains all tags using the provided tagnames
 	 * @param p a product object
@@ -90,56 +96,100 @@ public class ProductService {
 			}
 		return false;
 	}
+
+	private void saveProduct(Product product) {
+		this.productRepository.save(product);
+	}
+
+	public String createProduct(Product product, HttpServletRequest request) {
+		//Check if client is logged in
+		Account a=getSessionAccount(request);
+		if(a == null||product==null) return "not-logged-in";
+
+		product.setId(0);
+		product.setAccountId(a);
+		//confirm the tags provided exist
+		if(product.getTags()!=null) {
+			Set<Tag>tags=new HashSet<Tag>();
+			for(Tag tag:product.getTags()) {
+				//confirm tag exists
+				Tag t=this.tagRepository.findById(tag.getId());
+				if(t==null)continue;
+				//add tag to product
+				tags.add(t);
+			}
+			product.setTags(tags);
+		}
+		this.productRepository.save(product);
+		return "success";
+	}
+	
+	public Product getProductById(int id) {
+		return this.productRepository.findById(id);
+	}
+	
+	public List<Product> getProductByName(String productname){
+		return this.productRepository.findByNameStartingWithIgnoreCase(productname);
+	}
+	
+	public List<Product> getProductByTagsName(List<String> tagnames) {
+		List<Product>allproducts=this.productRepository.findDistinctByTagsTagIn(tagnames);
+		List<Product>products=new LinkedList<Product>();
+		for(Product p:allproducts) {
+			//if the product is banned, we skip to the next product
+			if(isBanned(p)) {continue;}
+
+			//check if the product has all the requested tags
+			if(containsTagnames(p, tagnames))
+				products.add(p);
+		}
+		return products;
+	}
+	
 	
 	public List<Product> getProductByAccount(Account account) {
 		return this.productRepository.findByAccountid(account);
 	}
 
-	
-	public void saveProduct(Product product) {
-		this.productRepository.save(product);
-	}
-	
-	public void saveTags(Product product, List<Tag>tags) {		
+	public String updateProduct(Product product, HttpServletRequest request) {
+		//confirm login 
+		Account a=getSessionAccount(request);
+		if(a==null)return "not-logged-in";		
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
-		if(p==null)return;
-
-		System.out.println("before");
-		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
-
-		//adding in the individual tags one by one
-		for(Tag tag:tags) {
-			//confirm tag exists
-			Tag t=this.tagRepository.findById(tag.getId());
-			if(t==null)continue;
-			//add tag to product
-			p.addTag(t);
+		if(p==null)return "product-does-not-exist";
+		//check if you own the product or you're a moderator
+		if(!permission(a,p))
+			return "do-not-have-permission";
+		//overwriting product's attributes, excluding its id and accountid
+		if(product.getDescription()!=null)p.setDescription(product.getDescription());
+		if(product.getName()!=null)p.setName(product.getName());
+		if(product.getPicture()!=null)p.setPicture(product.getPicture());
+		if(product.getPrice()>=0)p.setPrice(product.getPrice());
+		if(product.getStock()>=0)p.setStock(product.getStock());
+		if(product.getTags()!=null) {
+			Set<Tag>tags=new HashSet<Tag>();
+			for(Tag tag:product.getTags()) {
+				//confirm tag exists
+				Tag t=this.tagRepository.findById(tag.getId());
+				if(t==null)continue;
+				//add tag to product
+				tags.add(t);
+			}
+			p.setTags(tags);
 		}
-
-		System.out.println("after");
-		p.getTags().forEach((t)->{System.out.println("productid"+p.getId()+" tagid"+t.getId());});
 		//save changes
 		saveProduct(p);					
+		return "success";
 	}
-	
-	public void deleteProduct(Product product) {
+		
+	public String deleteProduct(Product product, HttpServletRequest request) {
+		Account acc=getSessionAccount(request);
+		if(acc==null)return "not-logged-in";
+		Product p=getProductById(product.getId());
+		if(!permission(acc,p))return "do-not-have-permission";
 		this.productRepository.delete(product);
-	}
-	
-	public void deleteTags(Product product, List<Tag>tags) {
-		//confirm product exists
-		Product p=this.productRepository.findById(product.getId());
-		if(p==null)return;
-		//adding in the individual tags one by one
-		for(Tag tag:tags) {
-			//confirm tag is not null
-			if(tag==null)continue;
-			//remove tag's relationship with product
-			p.removeTag(tag.getId());
-		}
-		//save changes
-		saveProduct(p);					
+		return "success";
 	}
 	
 	public String buyProduct(int id, HttpServletRequest request) {

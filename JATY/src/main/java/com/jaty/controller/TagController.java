@@ -2,6 +2,8 @@ package com.jaty.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +26,32 @@ public class TagController {
 	TagService tagService;
 		
 	/**
+	 * Saves a tag onto the database. Only effects the tags table and can create or update tags.
+	 * Will likely implement more controlled implementations in the future.
+	 * @param tag A request body consisting of an entire Tag object.
+	 */
+	@RequestMapping(path="/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public boolean create(@RequestBody Tag tag, HttpServletRequest request) {
+		return this.tagService.create(tag, request);
+	}
+
+	/**
 	 * finds a tag with a matching id
 	 * @param id a request parameter "id" with an integer value
 	 * @return a tag object from the database
 	 */
-	@RequestMapping(path="/get")
+	@RequestMapping(path="/search/id")
 	public Tag get(@RequestParam int id) {
 		return this.tagService.getTag(id);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(path="/search/all")
+	public List<Tag> getAll() {
+		return this.tagService.getAll();
 	}
 		
 	/**
@@ -41,20 +62,21 @@ public class TagController {
 	 * @param tagname a request parameter called "tagname" which indicates what the desired tag's tagname starts with
 	 * @return a list of tags from the database.
 	 */
-	@RequestMapping(path="/search")
+	@RequestMapping(path="/search/tagname")
 	public List<Tag> search(@RequestParam String tagname) {
 		return this.tagService.searchTag(tagname);
 	}
 	
 	/**
-	 * Saves a tag onto the database. Only effects the tags table and can create or update tags.
-	 * Will likely implement more controlled implementations in the future.
-	 * @param tag A request body consisting of an entire Tag object.
+	 * 
+	 * @param tag
+	 * @param request
 	 */
-	@RequestMapping(path="/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void create(@RequestBody Tag tag) {
-		this.tagService.save(tag);
+	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public boolean update(@RequestBody Tag tag, HttpServletRequest request) {
+		return this.tagService.update(tag, request);
 	}
+
 	
 	/**
 	 * https://stackoverflow.com/questions/14585836/hibernate-many-to-many-cascading-delete?rq=1
@@ -63,8 +85,8 @@ public class TagController {
 	 * @param tag a single tag object. Requires an id, all other tag information is not used.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void delete(@RequestBody Tag tag) {
-		this.tagService.delete(tag);
+	public boolean delete(@RequestBody Tag tag, HttpServletRequest request) {
+		return this.tagService.delete(tag,request);
 	}
 	
 

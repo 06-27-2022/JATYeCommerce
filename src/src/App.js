@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Nav} from './components/nav'
+import { GetSponsors, AddPosts } from './pages/quotes';
 
 class item {
   constructor(name, url){
@@ -133,9 +134,9 @@ function UserProfileFunction() {      //Click arrow to show hidden function body
         <div class="row">
           <div class="col-md-6">
             <div class="profile-head">
-              <h5>
+              <h4>
                 Andrew Frumkin Account
-              </h5>
+              </h4>
             </div>
           </div>
         </div>
@@ -155,7 +156,7 @@ function UserProfileFunction() {      //Click arrow to show hidden function body
             <div class="tab-content profile-tab" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="profile-tab">
                     <label>User Id</label>
                   </div>
                   <div class="col-md-6">
@@ -311,4 +312,14 @@ export function PersonalItemPage(){
   );
 }
 
-
+export function Sponsors(){
+  return (
+    <div>
+      <Nav/>
+      <br/>
+      <AddPosts/>
+      <br/>
+   <GetSponsors/>
+    </div>
+  );
+}
