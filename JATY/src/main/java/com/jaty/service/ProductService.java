@@ -58,6 +58,7 @@ public class ProductService {
 	 * @return true if you have permission to access the product
 	 */
 	private boolean permission(Account a, Product p) {
+		if(a==null||p==null)return false;
 		if(p.getAccountId().getId()!=a.getId()&&!a.getRole().equalsIgnoreCase(Account.MODERATOR))
 			return false;
 		return true;
@@ -96,15 +97,14 @@ public class ProductService {
 		return false;
 	}
 
-	private boolean saveProduct(Product product) {
+	private void saveProduct(Product product) {
 		this.productRepository.save(product);
-		return true;
 	}
 
-	public boolean createProduct(Product product, HttpServletRequest request) {
+	public String createProduct(Product product, HttpServletRequest request) {
 		//Check if client is logged in
 		Account a=getSessionAccount(request);
-		if(a == null||product==null) return false;
+		if(a == null||product==null) return "not-logged-in";
 
 		product.setId(0);
 		product.setAccountId(a);
@@ -121,7 +121,7 @@ public class ProductService {
 			product.setTags(tags);
 		}
 		this.productRepository.save(product);
-		return true;
+		return "success";
 	}
 	
 	public Product getProductById(int id) {
@@ -160,7 +160,7 @@ public class ProductService {
 		if(p==null)return "product-does-not-exist";
 		//check if you own the product or you're a moderator
 		if(!permission(a,p))
-			return "you-do-not-own-this-product";
+			return "do-not-have-permission";
 		//overwriting product's attributes, excluding its id and accountid
 		if(product.getDescription()!=null)p.setDescription(product.getDescription());
 		if(product.getName()!=null)p.setName(product.getName());
@@ -182,50 +182,15 @@ public class ProductService {
 		saveProduct(p);					
 		return "success";
 	}
-	
-	
-	
-//	public boolean saveTags(Product product, List<Tag>tags) {		
-//		//confirm product exists
-//		Product p=this.productRepository.findById(product.getId());
-//		if(p==null)return false;
-//		//adding in the individual tags one by one
-//		for(Tag tag:tags) {
-//			//confirm tag exists
-//			Tag t=this.tagRepository.findById(tag.getId());
-//			if(t==null)continue;
-//			//add tag to product
-//			p.addTag(t);
-//		}
-//		//save changes
-//		saveProduct(p);					
-//		return true;
-//	}
-	
-	public boolean deleteProduct(Product product, HttpServletRequest request) {
+		
+	public String deleteProduct(Product product, HttpServletRequest request) {
 		Account acc=getSessionAccount(request);
-		if(acc==null)return false;
+		if(acc==null)return "not-logged-in";
 		Product p=getProductById(product.getId());
-		if(!permission(acc,p))return false;
+		if(!permission(acc,p))return "do-not-have-permission";
 		this.productRepository.delete(product);
-		return true;
+		return "success";
 	}
-	
-//	public boolean deleteTags(Product product, List<Tag>tags) {
-//		//confirm product exists
-//		Product p=this.productRepository.findById(product.getId());
-//		if(p==null)return false;
-//		//adding in the individual tags one by one
-//		for(Tag tag:tags) {
-//			//confirm tag is not null
-//			if(tag==null)continue;
-//			//remove tag's relationship with product
-//			p.removeTag(tag.getId());
-//		}
-//		//save changes
-//		saveProduct(p);					
-//		return true;
-//	}
 	
 	public String buyProduct(int id, HttpServletRequest request) {
 		//Check if client is logged in for buying

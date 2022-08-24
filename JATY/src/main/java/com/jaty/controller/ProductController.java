@@ -35,7 +35,7 @@ public class ProductController {
 	 * @return true if the product is created in the database
 	 */
 	@RequestMapping(path="/create")
-	public boolean createProduct(@RequestBody Product product, HttpServletRequest request) {
+	public String createProduct(@RequestBody Product product, HttpServletRequest request) {
 		return this.productService.createProduct(product, request);
 	}	
 	
@@ -120,7 +120,7 @@ public class ProductController {
 	 * @return true if the product was deleted from the database.
 	 */
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public boolean deleteProduct(@RequestBody Product product, HttpServletRequest request) {
+	public String deleteProduct(@RequestBody Product product, HttpServletRequest request) {
 		return this.productService.deleteProduct(product, request);
 	}		
 
