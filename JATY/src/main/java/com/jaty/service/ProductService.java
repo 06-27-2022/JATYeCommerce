@@ -198,19 +198,19 @@ public class ProductService {
 	
 	public String updatePicture(int id,InputStream in,HttpServletRequest request) {
 		//confirm login 
-//		Account a=getSessionAccount(request);
-//		if(a==null)return "not-logged-in";		
-//		//confirm product exists
-//		Product p=this.productRepository.findById(id);
-//		if(p==null)return "product-does-not-exist";
-//		//check if you own the product or you're a moderator
-//		if(!permission(a,p))return "do-not-have-permission";		
+		Account a=getSessionAccount(request);
+		if(a==null)return "not-logged-in";		
+		//confirm product exists
+		Product p=this.productRepository.findById(id);
+		if(p==null)return "product-does-not-exist";
+		//check if you own the product or you're a moderator
+		if(!permission(a,p))return "do-not-have-permission";		
 
 		String key="key"+id+".png";
 		
 		bucketUtil.uploadInputStream(in, key);
-//		p.setPicture(key);
-//		updateProduct(p, request);
+		p.setPicture(key);
+		updateProduct(p, request);
 		return "success";
 	}
 		
