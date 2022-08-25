@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +32,13 @@ public class ReviewController {
 		this.reviewService.save(review);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/{productid}/add", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public String addReviewToProduct(@PathVariable int productid, @RequestBody Review review, HttpServletRequest request) {
 		return this.reviewService.createReviewForProduct(productid, review, request);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/{productid}/seeall")
 	public List<Review> seeAllReviewsForProduct(@PathVariable int productid){
 		return this.reviewService.findAllReviewsByProductId(productid);
