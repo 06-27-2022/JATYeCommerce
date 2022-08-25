@@ -1,5 +1,6 @@
 package com.jaty.service;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import com.jaty.repository.AccountRepository;
 import com.jaty.repository.ProductRepository;
 import com.jaty.repository.TagRepository;
 import com.jaty.repository.WalletRepository;
+import com.jaty.utils.BucketUtil;
 
 @Service("jatyProductService")
 public class ProductService {
@@ -35,6 +37,9 @@ public class ProductService {
 	
 	@Autowired
 	private WalletRepository walletRepository;
+	
+	@Autowired
+	private BucketUtil bucketUtil;
 	
 	public ProductService() {}
 
@@ -159,8 +164,7 @@ public class ProductService {
 		Product p=this.productRepository.findById(product.getId());
 		if(p==null)return "product-does-not-exist";
 		//check if you own the product or you're a moderator
-		if(!permission(a,p))
-			return "do-not-have-permission";
+		if(!permission(a,p))return "do-not-have-permission";
 		//overwriting product's attributes, excluding its id and accountid
 		if(product.getDescription()!=null)p.setDescription(product.getDescription());
 		if(product.getName()!=null)p.setName(product.getName());
@@ -180,6 +184,24 @@ public class ProductService {
 		}
 		//save changes
 		saveProduct(p);					
+		return "success";
+	}
+	
+	public String updatePicture(int id,InputStream in,HttpServletRequest request) {
+		//confirm login 
+		Account a=getSessionAccount(request);
+		if(a==null)return "not-logged-in";		
+		//confirm product exists
+		Product p=this.productRepository.findById(id);
+		if(p==null)return "product-does-not-exist";
+		//check if you own the product or you're a moderator
+		if(!permission(a,p))return "do-not-have-permission";		
+
+		String key=p.getName()+p.getId();
+		
+		bucketUtil.uploadInputStream(in, key);
+		p.setPicture(key);
+		updateProduct(p, request);
 		return "success";
 	}
 		
