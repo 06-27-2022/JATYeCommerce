@@ -58,7 +58,9 @@ public class ProductController {
 	 * The search is case insensitive so Asdf will can return ASDF1 and asdf2
 	 * @param productname a request parameter "productname" with the value being the 
 	 * name of the product being searched.
-	 * @return All products whose name start with productname
+	 * @return All products whose name start with productname. Searching by
+	 * and empty string will return all products. 
+	 * /product/search/productname?productname=
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/search/productname")
@@ -82,6 +84,17 @@ public class ProductController {
 		return this.productService.getProductByTagsName(tagnames);
 	}
 	
+	/**
+	 * Search for products owned by the account logged in
+	 * @return a list of products. Will return an empty list if 
+	 * not logged in.
+	 */
+	@CrossOrigin
+	@RequestMapping(path="/search/myaccount")
+	public List<Product> getByMyAccount(HttpServletRequest request) {
+		return this.productService.getMyProduct(request);
+	}
+
 	/**
 	 * Will provide all products listed under the provided account
 	 * @param account the account whose products we are viewing
