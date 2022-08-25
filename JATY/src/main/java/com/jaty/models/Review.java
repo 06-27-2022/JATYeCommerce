@@ -70,6 +70,13 @@ public class Review {
 		this.reviewBody=reviewBody;
 	}
 	
+	public Review(Account account, Product product, int rating, String reviewBody) {
+		this.accountId=account;
+		this.productId=product;
+		this.rating=rating;
+		this.reviewBody=reviewBody;
+	}
+	
 	//getters and setters for jatyReview.
 	
 	public int getId() {
