@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ public class TagController {
 	 * Will likely implement more controlled implementations in the future.
 	 * @param tag A request body consisting of an entire Tag object.
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public boolean create(@RequestBody Tag tag, HttpServletRequest request) {
 		return this.tagService.create(tag, request);
@@ -40,6 +42,7 @@ public class TagController {
 	 * @param id a request parameter "id" with an integer value
 	 * @return a tag object from the database
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/search/id")
 	public Tag get(@RequestParam int id) {
 		return this.tagService.getTag(id);
@@ -49,6 +52,7 @@ public class TagController {
 	 * 
 	 * @return
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/search/all")
 	public List<Tag> getAll() {
 		return this.tagService.getAll();
@@ -62,6 +66,7 @@ public class TagController {
 	 * @param tagname a request parameter called "tagname" which indicates what the desired tag's tagname starts with
 	 * @return a list of tags from the database.
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/search/tagname")
 	public List<Tag> search(@RequestParam String tagname) {
 		return this.tagService.searchTag(tagname);
@@ -72,6 +77,7 @@ public class TagController {
 	 * @param tag
 	 * @param request
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public boolean update(@RequestBody Tag tag, HttpServletRequest request) {
 		return this.tagService.update(tag, request);
@@ -84,6 +90,7 @@ public class TagController {
 	 * the producttotag join table
 	 * @param tag a single tag object. Requires an id, all other tag information is not used.
 	 */
+	@CrossOrigin
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public boolean delete(@RequestBody Tag tag, HttpServletRequest request) {
 		return this.tagService.delete(tag,request);

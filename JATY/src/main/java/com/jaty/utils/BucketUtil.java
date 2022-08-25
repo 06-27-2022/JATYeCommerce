@@ -57,7 +57,7 @@ public class BucketUtil {
     @Autowired
     private Logger log;
     
-    public static final String BUCKETNAME="s3bucket";
+    private static final String BUCKETNAME=System.getenv("s3bucket");
     /**
      * You may want to consider expanding this in the future to read things other than environment variables in case they do not exist
      * <br>
@@ -320,12 +320,12 @@ public class BucketUtil {
 			byte[] bytes = null;
 			bytes = IOUtils.toByteArray(in);
 			metadata.setContentLength(bytes.length);
-			bytea = new ByteArrayInputStream(bytes);		
+			bytea = new ByteArrayInputStream(bytes);	
+			in.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		//upload
 		try {
 			xfer = xfer_mgr.upload(

@@ -197,7 +197,7 @@ public class ProductService {
 		//check if you own the product or you're a moderator
 		if(!permission(a,p))return "do-not-have-permission";		
 
-		String key=p.getName()+p.getId();
+		String key="key"+id+".png";
 		
 		bucketUtil.uploadInputStream(in, key);
 		p.setPicture(key);
