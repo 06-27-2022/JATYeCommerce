@@ -21,6 +21,7 @@ public class JatyApplication {
 		return logger;
 	}
 	
+	@Bean
 	public BucketUtil bucket() {
 		BucketUtil b = new BucketUtil();
 		return b;

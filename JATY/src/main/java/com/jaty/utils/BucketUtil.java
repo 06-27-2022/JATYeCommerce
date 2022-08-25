@@ -1,12 +1,15 @@
 package com.jaty.utils;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,9 +18,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ListVersionsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -28,6 +34,7 @@ import com.amazonaws.services.s3.transfer.Transfer;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.util.IOUtils;
 
 /**
  * https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3-buckets.html
@@ -39,6 +46,8 @@ import com.amazonaws.services.s3.transfer.Upload;
  * With these buckets, you could use a varchar
  * refering to the a bucket's key instead of a bytea to directly store the file. When downloading files, 
  * it still needs a locally stored file to stream the downloaded contents into.
+ * <br>
+ * Only uploadingInputStream should be used.
  * @author tomh0
  */
 public class BucketUtil {
@@ -48,6 +57,7 @@ public class BucketUtil {
     @Autowired
     private Logger log;
     
+    private static final String BUCKETNAME=System.getenv("s3bucket");
     /**
      * You may want to consider expanding this in the future to read things other than environment variables in case they do not exist
      * <br>
@@ -292,6 +302,41 @@ public class BucketUtil {
     	return f;
     }
     
+    /**
+     * in need of further testing. This is what we should be using for file uploading
+     * @param in input stream
+     * @param bucket_name unique bucket name
+     * @param key_name the file's key in the bucket
+     */
+    public void uploadInputStream(InputStream in, String key_name) {
+		TransferManager xfer_mgr = TransferManagerBuilder.standard().build();
+		Upload xfer=null;
+
+		//create metadata
+		ByteArrayInputStream bytea=null;
+		ObjectMetadata metadata=new ObjectMetadata();
+		metadata.setContentType(ContentType.IMAGE_PNG.toString());
+		try {
+			byte[] bytes = null;
+			bytes = IOUtils.toByteArray(in);
+			metadata.setContentLength(bytes.length);
+			bytea = new ByteArrayInputStream(bytes);	
+			in.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//upload
+		try {
+			xfer = xfer_mgr.upload(
+					new PutObjectRequest(BUCKETNAME, key_name, bytea!=null?bytea:in, metadata)
+					.withCannedAcl(CannedAccessControlList.PublicRead));	
+			progress(xfer);
+		} catch (AmazonServiceException e) {
+			e.printStackTrace();
+		}
+		xfer_mgr.shutdownNow();		
+	}
     /**
      * waits for the transfer to complete and logs the progress of the transfer in percent
      * @param xfer A Transfer object such as Upload or Download
