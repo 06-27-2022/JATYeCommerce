@@ -36,37 +36,31 @@ public class AccountService {
 	
 	
 	
-	public String accountLogin(Account account, HttpServletRequest request) {
+	public String accountLogin(Account account) {
 		Account loginAttempt = this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
 		if(loginAttempt==null) {
 			return "bad-login";
 		}else {
-			HttpSession session = request.getSession();
-			session.setAttribute("accountId", loginAttempt.getId());
-			session.setAttribute("role", loginAttempt.getRole());
 			return "good-login";
 		}		
 	}
 	
-	public String accountLogout(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if(session != null) session.invalidate();
-		return "logged-out";
-	}
+//	public String accountLogout(HttpServletRequest request) {
+//		HttpSession session = request.getSession(false);
+//		if(session != null) session.invalidate();
+//		return "logged-out";
+//	}
 	
-	public String clientCreateAccount(Account account, HttpServletRequest request) {
+	public String clientCreateAccount(Account account) {
 		Account accountSearch = this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
 		if(accountSearch==null) {
 			account.setRole("default");
 			this.accountRepository.save(account);
 			accountSearch = this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
-			HttpSession session = request.getSession();
-			session.setAttribute("accountId", accountSearch.getId());
-			session.setAttribute("role", accountSearch.getRole());
 			//logic to create a wallet
 			Wallet newWallet = new Wallet(accountSearch, 0.00);
 			walletRepository.save(newWallet);
-			return "new-user-created with id = "+ session.getAttribute("accountId");
+			return "new-user-created with id = "+ accountSearch.getId();
 		}else {
 			return "username-already-exists";
 		}
