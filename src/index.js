@@ -1,36 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {Routes, Route, BrowserRouter} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import reportWebVitals from './reportWebVitals';
 
 import './index.css';
-import {HomePage} from './App';
-import {Signup} from './App';
-import {UserProfile} from './App';
-import {ItemEditor} from './App';
-import {ProductPage} from './App';
-import {PersonalItemPage} from './App';
-import { UserTest } from './App';
-import {AddUser} from './pages/AddUser';
-import { AddItem } from './pages/AddItem';
-import  Login  from './pages/Login';
-
-
+import { PictureUpdate } from './pages/ProductPicture';
+import { Login } from './pages/Login';
+import { ViewProductsByName } from './pages/View Products by Name';
+import { ViewProductsByTags } from './pages/View Products by Tags';
+import { CreateAccount } from './pages/Create Account';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <div>
-        
-        <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Login/>}/>
-            <Route path="/HomePage" element={<HomePage/>}/>
-            <Route path="/SignUp" element={<Signup/>}/>
-            <Route path="/UserProfile" element={<UserProfile/>}/>
-            <Route path="/ItemEditor" element={<AddItem/>}/>
-            <Route path="/ProductPage" element={<ProductPage/>}/>
-            <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>
-            <Route path="/UserTest" element={<UserTest/>}/>
-            {/* <Route path="/findall" element={<AddUser/>}/> */}
-            </Routes>
-            </BrowserRouter>
-    </div>
-)
+  <div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login/>}/>
+        <Route path="/test1" element={<PictureUpdate/>}/>
+        <Route path="/test2" element={<ViewProductsByName/>}/>
+        <Route path="/test3" element={<ViewProductsByTags/>}/>
+        <Route path="/test4" element={<CreateAccount/>}/>
+      </Routes>
+    </BrowserRouter>
+  </div>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

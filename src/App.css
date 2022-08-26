@@ -1,43 +1,38 @@
-.section {
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 0.5em;
-  padding:2em;
+.App {
   text-align: center;
 }
 
-.container {
-  margin-top:2em; 
-  display: grid;
-  grid-template-columns: 20em 20em 20em;
-  column-gap: 1em;
-  row-gap: 1em;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-    /* body{
-    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
-} */
-.emp-profile{
-    padding: 3%;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    border-radius: 0.5rem;
-    background: #fff;
-}
-.profile-head h5{
-    color: #333;
+.App-link {
+  color: #61dafb;
 }
 
-.profile-work p{
-  font-weight: 600;
-  color: #0062cc;
-  text-align: left;
-  text-indent: 600px;
-}
-.profile-tab p{
-    font-weight: 600;
-    color: #0062cc;
-    text-align: center;
-    text-indent: 100px;
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
