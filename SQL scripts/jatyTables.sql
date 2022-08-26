@@ -20,7 +20,7 @@ picture varchar(16) unique,
 description text,
 stock integer not null,
 price decimal not NULL,
-name varchar(32) NOT NULL
+productname varchar(32) NOT NULL
 );
 
 create table jatyTag(
