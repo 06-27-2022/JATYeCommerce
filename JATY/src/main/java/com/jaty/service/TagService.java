@@ -2,8 +2,6 @@ package com.jaty.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +26,14 @@ public class TagService {
 
 	public TagService() {}
 	
-	private boolean permission(HttpServletRequest request) {
-		Account acc=this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
-		if(acc.getRole().equals(Account.DEFAULT))return false;
+	private boolean permission(int accountid) {
+		Account acc=this.accountRepository.findById(accountid);		
+		if(acc==null||acc.getRole().equals(Account.DEFAULT))return false;
 		return true;
 	}
 		
-	public boolean create(Tag tag, HttpServletRequest request) {
-		if(!permission(request))return false;
+	public boolean create(Tag tag, int accountid) {
+		if(!permission(accountid))return false;
 		//check if tag exists
 		if(getTag(tag.getTag())!=null)return false;
 		//create new tag
@@ -56,8 +54,8 @@ public class TagService {
 		return this.tagRepository.findByTagStartingWithIgnoreCase(tagname);
 	}
 	
-	public boolean update(Tag tag, HttpServletRequest request) {
-		if(!permission(request))return false;
+	public boolean update(Tag tag, int accountid) {
+		if(!permission(accountid))return false;
 		//check if tag exists
 		Tag t=getTag(tag.getId());
 		if(t==null)return false;
@@ -67,8 +65,8 @@ public class TagService {
 		return true;
 	}
 	
-	public boolean delete(Tag tag, HttpServletRequest request) {
-		if(!permission(request))return false;
+	public boolean delete(Tag tag, int accountid) {
+		if(!permission(accountid))return false;
 		//confirm tag exists
 		Tag t=getTag(tag.getId());
 		if(t==null)return false;

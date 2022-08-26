@@ -8,9 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +46,9 @@ public class ProductService {
 	 * @param request
 	 * @return
 	 */
-	private Account getSessionAccount(HttpServletRequest request) {
+	private Account getSessionAccount(int accountid) {
 		try{
-			return this.accountRepository.findById((int)request.getSession(false).getAttribute("accountId"));		
+			return this.accountRepository.findById(accountid);		
 		}catch(NullPointerException e) {
 			return null;
 		}
@@ -107,9 +104,9 @@ public class ProductService {
 		this.productRepository.save(product);
 	}
 
-	public String createProduct(Product product, HttpServletRequest request) {
+	public String createProduct(Product product,int accountid) {
 		//Check if client is logged in
-		Account a=getSessionAccount(request);
+		Account a=getSessionAccount(accountid);
 		if(a == null||product==null) return "not-logged-in";
 
 		product.setId(0);
@@ -134,8 +131,8 @@ public class ProductService {
 		return this.productRepository.findById(id);
 	}
 	
-	public List<Product> getMyProduct(HttpServletRequest request) {
-		Account acc = getSessionAccount(request);
+	public List<Product> getMyProduct(int accountid) {
+		Account acc = getSessionAccount(accountid);
 		if(acc==null)return new ArrayList<Product>();
 		return this.productRepository.findByAccountid(acc);
 	}
@@ -165,9 +162,9 @@ public class ProductService {
 		return this.productRepository.findByAccountid(account);
 	}
 
-	public String updateProduct(Product product, HttpServletRequest request) {
+	public String updateProduct(Product product, int accountid) {
 		//confirm login 
-		Account a=getSessionAccount(request);
+		Account a=getSessionAccount(accountid);
 		if(a==null)return "not-logged-in";		
 		//confirm product exists
 		Product p=this.productRepository.findById(product.getId());
@@ -196,9 +193,9 @@ public class ProductService {
 		return "success";
 	}
 	
-	public String updatePicture(int id,InputStream in,HttpServletRequest request) {
+	public String updatePicture(int id,InputStream in, int accountid) {
 		//confirm login 
-		Account a=getSessionAccount(request);
+		Account a=getSessionAccount(accountid);
 		if(a==null)return "not-logged-in";		
 		//confirm product exists
 		Product p=this.productRepository.findById(id);
@@ -210,12 +207,12 @@ public class ProductService {
 		
 		bucketUtil.uploadInputStream(in, key);
 		p.setPicture(key);
-		updateProduct(p, request);
+		updateProduct(p, accountid);
 		return "success";
 	}
 		
-	public String deleteProduct(Product product, HttpServletRequest request) {
-		Account acc=getSessionAccount(request);
+	public String deleteProduct(Product product, int accountid) {
+		Account acc=getSessionAccount(accountid);
 		if(acc==null)return "not-logged-in";
 		Product p=getProductById(product.getId());
 		if(!permission(acc,p))return "do-not-have-permission";
@@ -223,13 +220,14 @@ public class ProductService {
 		return "success";
 	}
 	
-	public String buyProduct(int id, HttpServletRequest request) {
+	public String buyProduct(int id, int accountid) {
 		//Check if client is logged in for buying
-		HttpSession session = request.getSession(false);
-		if(session != null) {
+//		HttpSession session = request.getSession(false);
+//		if(session != null) {
+		if(accountid >= 0) {
 			//Retrieve product for purchase, account of buyer, and the buyer's wallet
 			Product purchase = getProductById(id);
-			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
+			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById(accountid));
 			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() < 0) {
 				//If buyer balance or purchase is out of stock then no further logic is done
 				//This can be broken down to give more details to client
@@ -250,49 +248,4 @@ public class ProductService {
 		//If client is not logged in they are informed
 		return "not-logged-in";
 	}
-	
-	public String adjustProductStock(int id, int adjustment,HttpServletRequest request) {
-		
-		HttpSession session = request.getSession(false);
-		if(session != null) {
-			Product target = getProductById(id);
-			if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
-			target.setStock(target.getStock()+adjustment);
-			saveProduct(target);
-			return "stock-adjusted-to: "+target.getStock();	
-			}
-			return "do-not-have-permission";
-		}
-		return "not-logged-in";
-	}
-	
-	public String overwriteProductPrice(int id, int adjustment,HttpServletRequest request) {
-			
-			HttpSession session = request.getSession(false);
-			if(session != null) {
-				Product target = getProductById(id);
-				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
-				target.setPrice(adjustment);
-				saveProduct(target);
-				return "price-adjusted-to: "+target.getPrice();	
-				}
-				return "do-not-have-permission";
-			}
-			return "not-logged-in";
-		}	
-	
-	public String overwriteProductDescription(int id, String edit,HttpServletRequest request) {
-			
-			HttpSession session = request.getSession(false);
-			if(session != null) {
-				Product target = getProductById(id);
-				if(target.getAccountId().getId()== (int)session.getAttribute("accountId")) {
-				target.setDescription(edit);
-				saveProduct(target);
-				return "description-edited-to: "+target.getDescription();	
-				}
-				return "do-not-have-permission";
-			}
-			return "not-logged-in";
-		}
 }

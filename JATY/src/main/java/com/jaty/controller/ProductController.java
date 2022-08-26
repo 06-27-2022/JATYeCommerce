@@ -3,8 +3,6 @@ package com.jaty.controller;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,8 +36,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/create")
-	public String createProduct(@RequestBody Product product, HttpServletRequest request) {
-		return this.productService.createProduct(product, request);
+	public String createProduct(@RequestBody Product product, @RequestParam int accountid) {
+		return this.productService.createProduct(product, accountid);
 	}	
 	
 	/**
@@ -91,8 +89,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/search/myaccount")
-	public List<Product> getByMyAccount(HttpServletRequest request) {
-		return this.productService.getMyProduct(request);
+	public List<Product> getByMyAccount(@RequestParam int accountid) {
+		return this.productService.getMyProduct(accountid);
 	}
 
 	/**
@@ -117,8 +115,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String updateProduct(@RequestBody Product product, HttpServletRequest request) {
-		return this.productService.updateProduct(product, request);
+	public String updateProduct(@RequestBody Product product, @RequestParam int accountid) {
+		return this.productService.updateProduct(product, accountid);
 	}	
 	
 	/**
@@ -133,8 +131,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/update/picture")
-	public String updatePicture(@RequestParam int id, InputStream in, HttpServletRequest request) {
-		return this.productService.updatePicture(id,in,request);
+	public String updatePicture(@RequestParam int id, InputStream in, @RequestParam int accountid) {
+		return this.productService.updatePicture(id,in,accountid);
 	}	
 	
 	
@@ -149,8 +147,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/{id}/buy")
-	public String buyProduct(@PathVariable int id, HttpServletRequest request) {
-		return this.productService.buyProduct(id, request);
+	public String buyProduct(@PathVariable int id,@RequestParam int accountid) {
+		return this.productService.buyProduct(id,accountid);
 	}
 
 	/**
@@ -160,53 +158,8 @@ public class ProductController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteProduct(@RequestBody Product product, HttpServletRequest request) {
-		return this.productService.deleteProduct(product, request);
+	public String deleteProduct(@RequestBody Product product, @RequestParam int accountid) {
+		return this.productService.deleteProduct(product, accountid);
 	}		
-
-	/**
-	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
-	 * permissions are retrieved from the HttpSession. This particular end-point edits the stock of a
-	 * product.
-	 * @param id of product to be edited
-	 * @param adjustment 
-	 * @param request contains the account id need to determine permissions
-	 * @return modifications to the selected product in the database. 
-	 */
-	@CrossOrigin
-	@RequestMapping(path="/{id}/adjuststock")
-	public String adjustStock(@PathVariable int id, @RequestParam int adjustment, HttpServletRequest request) {
-		return this.productService.adjustProductStock(id, adjustment, request);
-	}
-	
-	/**
-	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
-	 * permissions are retrieved from the HttpSession. This particular end-point edits the price of a
-	 * product.
-	 * @param id of product to be edited
-	 * @param adjustment 
-	 * @param request contains the account id need to determine permissions
-	 * @return modifications to the selected product in the database. 
-	 */
-	@CrossOrigin
-	@RequestMapping(path="/{id}/adjustprice")
-	public String adjustPrice(@PathVariable int id, @RequestParam int adjustment, HttpServletRequest request) {
-		return this.productService.overwriteProductPrice(id, adjustment, request);
-	}
-	
-	/**
-	 * Retrieves product id from path URL, adjustment amount is retrieved from a request paramater and
-	 * permissions are retrieved from the HttpSession. This particular end-point edits the description
-	 * of a product.
-	 * @param id of product to be edited
-	 * @param edit 
-	 * @param request contains the account id need to determine permissions
-	 * @return modifications to the selected product in the database. 
-	 */
-	@CrossOrigin
-	@RequestMapping(path="/{id}/adjustdescription")
-	public String adjustDescription(@PathVariable int id, @RequestParam String edit, HttpServletRequest request) {
-		return this.productService.overwriteProductDescription(id, edit, request);
-	}
 }
 
