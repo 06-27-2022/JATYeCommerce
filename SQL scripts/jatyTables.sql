@@ -29,11 +29,13 @@ tag varchar(64) unique not null,
 ban boolean not null
 );
 
-create table jatyProductToTag(
-productID int references jatyProduct(id) not null,
-tagID int references jatyTag(id) not null
+CREATE TABLE public.jatyproducttotag (
+	productid int4 NOT NULL,
+	tagid int4 NOT NULL,
+	CONSTRAINT jatyproduct_jatytag_pkey PRIMARY KEY (productid, tagid),
+	CONSTRAINT jatyproducttotag_productid_fkey FOREIGN KEY (productid) REFERENCES public.jatyproduct(id),
+	CONSTRAINT jatyproducttotag_tagid_fkey FOREIGN KEY (tagid) REFERENCES public.jatytag(id)
 );
-create unique index ptt on jatyproducttotag(productID,tagID);
 
 create table jatyReview(
 id serial primary key,
