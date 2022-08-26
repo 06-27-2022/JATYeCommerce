@@ -6,7 +6,7 @@ export function Nav() {
     return (
         <nav>
             <div>
-                <Link to="/">Login</Link>
+                {/* <Link to="/">Login</Link> */}
                 {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapseable"></button> */}
                 <ul className="navbar-nav">
                     <li className="nav-item">
