@@ -30,18 +30,17 @@ public class WalletService {
 		this.walletRepository.save(wallet);
 	}
 	
-	public Wallet getWalletByAccount(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if(session != null) {
-		Account accountSearch = this.accountRepository.findById((int) session.getAttribute("accountId"));	
+	public Wallet getWalletByAccount(int accountid) {
+		if(accountid != 0) {
+		Account accountSearch = this.accountRepository.findById(accountid);	
 		return this.walletRepository.findByAccountId(accountSearch);
 		}
 		return null;
 		
 	}
 	
-	public String editWalletBalance(double edit, HttpServletRequest request) {
-		Wallet targetWallet = getWalletByAccount(request);
+	public String editWalletBalance(double edit, int accountid) {
+		Wallet targetWallet = getWalletByAccount(accountid);
 		targetWallet.setBalance(targetWallet.getBalance() + edit);
 		this.walletRepository.save(targetWallet);
 		return "new-wallet-balance: " + targetWallet.getBalance();

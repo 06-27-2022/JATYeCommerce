@@ -69,8 +69,8 @@ public class AccountController {
 	 * @return HttpSession with accountId and accountRole attributes.
 	 */
 	@RequestMapping(path="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String  logIn(@RequestBody Account account, HttpServletRequest request) {
-		return this.accountService.accountLogin(account, request);
+	public String  logIn(@RequestBody Account account) {
+		return this.accountService.accountLogin(account);
 	}
 	
 	/**
@@ -78,11 +78,11 @@ public class AccountController {
 	 * @param request
 	 * @return an empty HttpSession
 	 */
-	@RequestMapping(path="/logout")
-	public String logOut(HttpServletRequest request) {
-		return this.accountService.accountLogout(request);
-	}
-	
+//	@RequestMapping(path="/logout")
+//	public String logOut(HttpServletRequest request) {
+//		return this.accountService.accountLogout(request);
+//	}
+//	
 	/**
 	 * Retrieves a json containing account necessary information, checks it
 	 * against database records to determine validity, modifies the database appropriately in both
@@ -92,7 +92,7 @@ public class AccountController {
 	 * @return HttpSession with accountId and accountRole attributes.
 	 */
 	@RequestMapping(path="/new",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public String newAccount(@RequestBody Account account, HttpServletRequest request) {
-		return this.accountService.clientCreateAccount(account, request);
+	public String newAccount(@RequestBody Account account) {
+		return this.accountService.clientCreateAccount(account);
 	}
 }

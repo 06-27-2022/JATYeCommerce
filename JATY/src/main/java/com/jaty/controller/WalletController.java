@@ -35,12 +35,12 @@ public class WalletController {
 	 * @return json containing the relevant Wallet information.
 	 */
 	@RequestMapping(path="/account")
-	public Wallet checkWallet(HttpServletRequest request) {
-		return this.walletService.getWalletByAccount(request);
+	public Wallet checkWallet(@RequestParam int accountid) {
+		return this.walletService.getWalletByAccount(accountid);
 	}
 	
 	@RequestMapping(path="/account/adjustfunds")
-	public String adjustBalance(@RequestParam double input, HttpServletRequest request) {
-		return this.walletService.editWalletBalance(input, request);
+	public String adjustBalance(@RequestParam double input, @RequestParam int accountid) {
+		return this.walletService.editWalletBalance(input, accountid);
 	}
 }

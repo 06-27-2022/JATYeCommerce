@@ -37,10 +37,9 @@ public class ReviewService {
 		this.reviewRepository.save(review);
 	}
 	
-	public String createReviewForProduct(int productid, Review review, HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if(session != null) {
-			Account reviewer = this.accountRepository.findById((int)session.getAttribute("accountId"));
+	public String createReviewForProduct(int productid, Review review, int accountid) {
+		if(accountid != 0) {
+			Account reviewer = this.accountRepository.findById(accountid);
 			Product target = this.productRepository.findById(productid);
 			if(this.reviewRepository.findByProductIdAndAccountId(target, reviewer)==null && target.getAccountId() != reviewer) {
 				review.setProductId(target);
