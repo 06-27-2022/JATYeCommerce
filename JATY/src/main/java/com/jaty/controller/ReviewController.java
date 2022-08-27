@@ -34,8 +34,8 @@ public class ReviewController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/{productid}/add", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public String addReviewToProduct(@PathVariable int productid, @RequestBody Review review, HttpServletRequest request) {
-		return this.reviewService.createReviewForProduct(productid, review, request);
+	public String addReviewToProduct(@PathVariable int productid, @RequestBody Review review, @RequestParam int accountid) {
+		return this.reviewService.createReviewForProduct(productid, review, accountid);
 	}
 	
 	@CrossOrigin
