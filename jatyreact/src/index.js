@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 
 import './index.css';
-import {HomePage} from './App';
+// import {HomePage} from './App';
+import { HomePage } from './pages/Homepage';
 import {Signup} from './App';
 import {UserProfile} from './App';
 import {ItemEditor} from './App';

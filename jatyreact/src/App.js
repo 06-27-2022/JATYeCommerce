@@ -6,7 +6,6 @@ import { AddUser } from './pages/AddUser';
 import { AddItem } from './pages/AddItem';
 import  Login  from './pages/Login';
 import { ViewUser } from './pages/UserProfile';
-import SearchBar from './context/SearchBar';
 
 class item {
   constructor(name, url){
@@ -67,7 +66,6 @@ function View() {           //Find method to pull Item info to page (preferably 
 
   return(
     <div className="container">
-      
       {sections}
     </div>
   );
@@ -101,7 +99,6 @@ export function HomePage(){
   return (
     <div>
       <Nav/>
-      <SearchBar/>
       <View/>
     </div>
   );
