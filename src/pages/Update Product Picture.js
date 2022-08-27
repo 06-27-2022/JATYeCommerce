@@ -12,7 +12,9 @@ export function PictureUpdate(){
   const inputRef = useRef()
 
   const [Productid,setProductid]=React.useState(0);
-  let apiurl = 'http://localhost:8080/product/update/picture?id='+Productid+'&accountid=1';
+  const accountid=2;
+
+  let apiurl = 'http://localhost:8080/product/update/picture?id='+Productid+'&accountid='+accountid;
  
   const handleSubmit = (e) => {
     e.preventDefault();

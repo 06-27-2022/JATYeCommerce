@@ -1,14 +1,13 @@
 import './../App.css';
 import React from 'react';
 import {Nav} from "../components/navbar"
+import { DisplayProduct } from './Display Product';
 
 export function ViewProductsByTags(){
   const [post,setPost]=React.useState([]);
   const [tagnames]=React.useState(new Set());
 
   const apiurl='http://localhost:8080/product/search/tagnames?tagnames=';
-  const bucketurl='https://tomh07bucket.s3.us-west-2.amazonaws.com/';
-  const noimage='https://';
 
   function createPost(apiurl){
     var axios = require('axios');
@@ -45,43 +44,32 @@ export function ViewProductsByTags(){
         <label htmlFor="tag6"> tag6</label><br/>
         <button type='submit'>Submit</button>
         </form>
-        <div>
-          {post.map((p) => (
-            <div key={p.id}>
-              <img src={p.picture!=null?bucketurl+p.picture:noimage} alt={p.name} width="100" height = "100"/>
-              <p>id: {p.id}</p>
-              <p>name: {p.name}</p>
-              <p>description: {p.description}</p>
-              <p>price: {p.price}</p>                    
-              <p>stock: {p.stock}</p>                    
-            </div>
-          ))}
-        </div>
+        <DisplayProduct post={post} />
     </React.Fragment>
   );
 }
 
-function View(){
-  const AllTags=()=>{
-    var axios = require('axios');
-    var config = {
-      method: 'get',
-      url: 'http://localhost:8080/tag/search/all',
-    };
-    axios(config)
-    .then(function (response) {
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  const SelectTags=()=>{
-    return(
-      <React.Fragment>
-      </React.Fragment>
-    );
-  }  
-}
+// function View(){
+//   const AllTags=()=>{
+//     var axios = require('axios');
+//     var config = {
+//       method: 'get',
+//       url: 'http://localhost:8080/tag/search/all',
+//     };
+//     axios(config)
+//     .then(function (response) {
+//       console.log(response.data);
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
+//   }
+//   const SelectTags=()=>{
+//     return(
+//       <React.Fragment>
+//       </React.Fragment>
+//     );
+//   }  
+// }
 
 

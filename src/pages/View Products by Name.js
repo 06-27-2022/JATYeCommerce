@@ -1,14 +1,15 @@
 import './../App.css';
 import React from 'react';
 import {Nav} from "../components/navbar"
+import { DisplayProduct } from './Display Product';
 
 export function ViewProductsByName(){
   const [post,setPost]=React.useState([]);
   const [productname,setProductname]=React.useState('');
 
   const apiurl='http://localhost:8080/product/search/productname?productname=';
-  const bucketurl='https://tomh07bucket.s3.us-west-2.amazonaws.com/';
-  const noimage='https://';
+  // const bucketurl='https://tomh07bucket.s3.us-west-2.amazonaws.com/';
+  // const noimage='https://';
 
   function createPost(url){
     var axios = require('axios');
@@ -41,18 +42,7 @@ export function ViewProductsByName(){
           <input type="productname" onChange={(e)=>{setProductname(e.target.value)}}/>
           <button type='submit'>Submit</button>
         </form>
-        <div>
-            {post.map((p) => (
-                <div key={p.id}>
-                    <img src={p.picture!=null?bucketurl+p.picture:noimage} alt={p.name} width="100px" height = "100px"/>
-                    <p>id: {p.id}</p>
-                    <p>name: {p.name}</p>
-                    <p>description: {p.description}</p>
-                    <p>price: {p.price}</p>                    
-                    <p>stock: {p.stock}</p>                    
-                </div>
-            ))}
-        </div>
+        <DisplayProduct post={post} />
     </React.Fragment>
   );
 }

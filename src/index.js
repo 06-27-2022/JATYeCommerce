@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
-import { PictureUpdate } from './pages/ProductPicture';
+import { PictureUpdate } from './pages/Update Product Picture';
 import { Login } from './pages/Login';
 import { ViewProductsByName } from './pages/View Products by Name';
 import { ViewProductsByTags } from './pages/View Products by Tags';
