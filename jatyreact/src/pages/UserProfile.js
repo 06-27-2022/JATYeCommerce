@@ -4,16 +4,35 @@ import axios from 'axios';
 
 export function ViewUser() {
     const [users, setUsers] = useState([])
+
     useEffect(() => {
         loadUsers();
-
     }, []);
 
     const loadUsers = async () => {
-        const result = await axios.get("http://localhost:8080/account")
-        setUsers(result.data);
-    };
+        //original
+        // const result = await axios.get("http://localhost:8080/account/listall")
+        // setUsers(result.data);
 
+        //copy pasted from postman
+        var axios = require('axios');
+
+        var config = {
+          method: 'get',
+          url: 'http://localhost:8080/account/listall',
+          headers: { }
+        };
+        
+        axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+            //you have to add setUsers yourself since postman only console.logs the response by default
+            setUsers(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });    
+    };
 
 
     return (
@@ -35,10 +54,10 @@ export function ViewUser() {
                         <tbody>
                             {users.map((user) => (
                                 <tr>
-                                    <th scope="row" key={user.id}></th>
-                                    <td>{user.id}</td>
+                                    <th scope="row" key={user.id}>{user.id}</th>
+                                    {/* <td>{user.id}</td> */}
                                     <td>{user.username}</td>
-                                    <td>{user.password}</td>
+                                    {/* <td>{user.password}</td> */}
                                     <td>{user.city}</td>
                                     <td>{user.state}</td>
                                 </tr>
