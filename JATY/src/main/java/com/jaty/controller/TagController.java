@@ -2,8 +2,6 @@ package com.jaty.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,8 +31,8 @@ public class TagController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public boolean create(@RequestBody Tag tag, HttpServletRequest request) {
-		return this.tagService.create(tag, request);
+	public boolean create(@RequestBody Tag tag, @RequestParam int accountid) {
+		return this.tagService.create(tag, accountid);
 	}
 
 	/**
@@ -79,8 +77,8 @@ public class TagController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public boolean update(@RequestBody Tag tag, HttpServletRequest request) {
-		return this.tagService.update(tag, request);
+	public boolean update(@RequestBody Tag tag, @RequestParam int accountid) {
+		return this.tagService.update(tag, accountid);
 	}
 
 	
@@ -92,8 +90,8 @@ public class TagController {
 	 */
 	@CrossOrigin
 	@RequestMapping(path="/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public boolean delete(@RequestBody Tag tag, HttpServletRequest request) {
-		return this.tagService.delete(tag,request);
+	public boolean delete(@RequestBody Tag tag, @RequestParam int accountid) {
+		return this.tagService.delete(tag,accountid);
 	}
 	
 
