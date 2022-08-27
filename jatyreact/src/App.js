@@ -4,7 +4,7 @@ import {Nav} from './components/nav'
 import { GetUser, AddUsers } from './pages/quotes';
 import { AddUser } from './pages/AddUser';
 import { AddItem } from './pages/AddItem';
-import { Login } from './pages/Login';
+import  Login  from './pages/Login';
 import { ViewUser } from './pages/UserProfile';
 
 class item {
@@ -74,155 +74,14 @@ function View() {           //Find method to pull Item info to page (preferably 
 
 
 
-function LoginPageFunction() {        //Add method to connect button to DB (currently not connected)
-  return(<form>
-    <div>
-      <h3>Sign-In</h3>
-    </div>
-    <div class="field">
-      <label htmlfor="a">Username</label>
-      <input type="text" placeholder="Enter Username" id="username" required></input>
-    </div>
-    <div class="field">
-      <label htmlfor="a">Password</label>
-      <input type="password" placeholder="Enter Password" id="password" required></input>
-    </div>
-    <button type="button">Submit</button>
-    </form>
-    );
-}
-
-function SignupPageFunction() {       //Add method to connect button to DB (currently not connected)
-  return (
-<form>
-  <div>
-    <h3>Please fill in this form to create an account</h3>
-  </div>
-  <div class="field">
-    <label for="a">Email</label>
-    <input type="text" placeholder="Enter Email" id="emailtemp" required></input>
-  </div>
-  <div class="field">
-    <label for="a">Password</label>
-    <input type="password" placeholder="Enter Password" id="passwordtemp" required></input>
-  </div>
-  <div class="field">
-    <label for="a">Repeat Password</label>
-    <input type="password" placeholder="Repeat Password" id="repeattemp" required></input>
-  </div>
-  <div class="field">
-    <label for="a">City of Residence</label>
-    <input type="text" placeholder="City of Residence" id="citytemp"></input>
-  </div>
-  <div class="field">
-    <label for="a">State of Residence</label>
-    <input type="text" placeholder="State of Residence" id="statetemp"></input>
-  </div>
-  <button type="button">Submit</button>
-  </form>
-  );
-  }
-
-function UserProfileFunction() {      //Click arrow to show hidden function body
-  return(
-    <>
-      <form method="post">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="profile-head">
-              <h4>
-                Andrew Frumkin Account
-              </h4>
-            </div>
-          </div>
-        </div>
 
 
-        <div class="row">
-          <div class="col-md-4">
-            <div class="profile-work">
-              <p>User Profile</p>
-              <a href="">Personal Items Page</a><br />
-              <a href="">Wallet Page</a>
-            </div>
-          </div>
 
 
-          <div class="col-md-8">
-            <div class="tab-content profile-tab" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="row">
-                  <div class="profile-tab">
-                    <label>User Id</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>afrumkin5</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Name</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>Andrew Frumkin</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Email</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>andrew096@revature.net</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Location</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>123 Seasame Street </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </>
-    );
-}
 
 
-function ItemEditorFunction() {
-  return(
-    <form>
-  <div>
-    <h3>Please fill in this form to edit/make an item</h3>
-  </div>
-  <div class="field">
-    <label for="a">Posting Title</label>
-    <input type="text" placeholder="Posting Title" id="postingTitle" required></input>
-  </div>
-  <div class="field">
-    <label for="a">Price</label>
-    <input type="number" placeholder="Enter Price" id="priceTemp" required></input>
-  </div>
-  <div class="field">
-    <label for="a">Description</label>
-    <input type="text" placeholder="Item Description" id="description" required></input>
-  </div>
-  <div class="field">
-    <label for="a">Amount Being Sold</label>
-    <input type="number" placeholder="Amount Being Sold" id="stockTemp"></input>
-  </div>
-  <div class="field">
-    <label for="a">Tags</label>
-    <input type="text" placeholder="Tags" id="tagsTemp"></input>
-  </div>
-  <button type="button">Submit</button>
-  </form>
-  );
-}
+
+
 
 
 function ProductPageFunction() {
@@ -259,7 +118,7 @@ export function Loginin(){
 export function Signup(){           //Finished
   return (
     <div>
-      <Nav/>
+      
       <AddUser/>
     </div>
   );

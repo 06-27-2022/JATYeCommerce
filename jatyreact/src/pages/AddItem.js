@@ -5,26 +5,27 @@ export function AddItem() {
 
     let navigate=useNavigate()
 
-    const [item, setItem]=useState({
+    const [product, setProduct]=useState({
 
-        id:'',
-        productname:'',
+        // picture:'',
+        name:'',
         description:'',
         stock:'',
-        price:'',
-        //tags:''
+        price:''
+        //tags:'',
+        //accountId:''
 
     });
 
-    const{productname, description, stock, price}=item
+    const{name, description, stock, price}=product
     const onInputChange=(e)=>{
-        setItem({...item,[e.target.name]:e.target.value});
+        setProduct({...product,[e.target.name]:e.target.value});
        
     };
 
     const onSubmit=async(e)=>{ 
         e.preventDefault()
-        await axios.post("http://localhost:8080/product/create",item)
+        await axios.post("http://localhost:8080/product/create",product)
         navigate("/HomePage")
     };
 
@@ -42,8 +43,8 @@ export function AddItem() {
                             type={"text"}
                             className="form-control"
                             placeholder='Name of Product'
-                            name="productname"
-                            value={productname}
+                            name="name"
+                            value={name}
                             onChange={(e)=> onInputChange(e)}
                         
                         />
@@ -109,6 +110,10 @@ export function AddItem() {
                     </div> */}
                 <button type='submit' className='btn btn-outline-primary mx-2'>Submit</button>
                 <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Cancel</Link>  
+                 <div>
+                    <h4>Click "Cancel" to return to the HomePage</h4>
+                    <h4>Click "Submit" to begin selling your item</h4>
+                 </div>
                   </form>
                 </div>
             </div>

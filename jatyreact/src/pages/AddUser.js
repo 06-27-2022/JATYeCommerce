@@ -107,6 +107,10 @@ export function AddUser() {
                     </div>
                 <button type='submit' className='btn btn-outline-primary mx-2'>Submit</button>
                 <Link type='submit' className='btn btn-outline-danger mx-2' to="/">Cancel</Link>  
+                  <div>
+                    <h4>Click "Cancel" to return to Login</h4>
+                    <h4>Click "Submit" to create your account</h4>
+                  </div>
                   </form>
                 </div>
             </div>
