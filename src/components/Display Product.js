@@ -35,7 +35,7 @@ export function DisplayProduct(props){
               <td>{p.accountId.username}</td>
               <td>{p.price}</td>                    
               <td>{p.stock}</td>                    
-              <td><PurchaseProduct productid={p.id} notifyParent={() => this.forceUpdate()}/></td>                    
+              <td><PurchaseProduct product={p}/></td>                    
             </tr>
           ))}
         </tbody>

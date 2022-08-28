@@ -47,7 +47,7 @@ const Login = () => {
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('check console');
-		window.location.href="/HomePage";
+                window.location.href="/HomePage";
             } else if (err.response?.status === 400) {
                 setErrMsg('Missing Username or Password');
             } else if (err.response?.status === 401) {

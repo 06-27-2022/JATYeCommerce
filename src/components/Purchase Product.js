@@ -3,7 +3,8 @@ import React, { useState } from "react";
 //in App.css
 export function PurchaseProduct(props){
     const [status,setStatus]=useState('');
-    const productid=props.productid;
+    const [count,setCount]=useState(props.product.stock);
+    const productid=props.product.id;
 
     const createPost=()=>{
         var axios = require('axios');
@@ -19,7 +20,8 @@ export function PurchaseProduct(props){
         .then(function (response) {
                 console.log(JSON.stringify(response.data));
                 setStatus(response.data);
-                props.notifyParent();
+                if(response.data==='product-bought')
+                    setCount(count-1);
         })
         .catch(function (error) {
                 console.log(error);
@@ -31,6 +33,7 @@ export function PurchaseProduct(props){
             onClick={createPost}
             />
             <p>{status}</p>
+            <p>{'remaining stock: '+count}</p>
         </React.Fragment>
     );
 
