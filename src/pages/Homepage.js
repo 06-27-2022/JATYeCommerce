@@ -12,7 +12,7 @@ export function HomePage(){
     function Search(){
         if(search===option[0])
             return <ViewProductsByName/>
-        else if(search===option[1])
+        if(search===option[1])
             return <ViewProductsByTags/>
     }
     
@@ -24,6 +24,7 @@ export function HomePage(){
             <p>Search by:</p>
             <input type='button' name='select' value={option[0]} onClick={(e)=>(setSearch(option[0]))}/>
             <input type='button' name='select' value={option[1]} onClick={(e)=>(setSearch(option[1]))}/>
+            <br/>            
             <br/>
             <Search/>
         </React.Fragment>

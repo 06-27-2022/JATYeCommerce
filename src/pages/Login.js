@@ -33,7 +33,7 @@ const Login = () => {
                 JSON.stringify({ username, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: false
+                    withCredentials: true
                 }
             );
             console.log(JSON.stringify(response?.data));
@@ -65,7 +65,7 @@ const Login = () => {
                     <h1>You are logged in!</h1>
                     <br />
                     <p>
-                        <a href="#">Go to Home</a>
+                        <a href="http://localhost:3000/HomePage">Go to Home</a>
                     </p>
                 </section>
             ) : (

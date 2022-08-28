@@ -19,6 +19,9 @@ export function Nav() {
                         <Link to="/UserProfile">Profile</Link>
                     </li>
                     <li className="nav-item">
+                        <Link to="/ItemCreator">Create Item</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link to="/ItemEditor">Edit Item</Link>
                     </li>
                     <li className="nav-item">

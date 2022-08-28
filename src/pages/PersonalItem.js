@@ -18,10 +18,11 @@ export function ViewUserItem() {
 
         var config = {
 		method: 'post',
-		url: 'http://localhost:8080/product/search/account',
+		url: 'http://localhost:8080/product/search/myaccount',
 		headers: { 
 				'Content-Type': 'application/json'
 		},
+        withCredentials:true,
 		data : data
         };
 

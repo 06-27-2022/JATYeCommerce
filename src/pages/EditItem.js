@@ -2,16 +2,17 @@ import React, { useEffect,useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 
 
-export function AddItem() {
+export function EditItem() {
     let navigate=useNavigate()
     const [product, setProduct]=useState({
+        id:0,
         name:'',
         description:'',
         stock:0,
         price:0,
         tags:[]
     });
-    const{name, description, stock, price, tags}=product
+    const{id, name, description, stock, price, tags}=product
     const onInputChange=(e)=>{
         setProduct({...product,[e.target.name]:e.target.value});
     };
@@ -52,7 +53,7 @@ export function AddItem() {
         var data = product;
         var config = {
                 method: 'post',
-                url: 'http://localhost:8080/product/create',
+                url: 'http://localhost:8080/product/update',
                 headers: { 
                         'Content-Type': 'application/json'
                 },
@@ -74,9 +75,26 @@ export function AddItem() {
         <div className='container'>
             <div className='row'>
                 <div className='col-md-6 offset-md-3 border rounded p-4 mt-5 shadow'>
-
                     <h2 className='text-center m-4'>List Product</h2>
                     <form onSubmit={(e)=>onSubmit(e)}>
+
+                    <div className='mb-3'>
+                        <label htmlFor='city' className='form-label'>
+                            Product ID
+                        </label>
+                        <input
+                            type={"number"}
+                            className="form-control"
+                            placeholder='Product ID'
+                            name="id"
+                            value={id}
+                            // onChange={(e)=> onInputChange(e)}
+                            onChange={(e)=>{setProduct({...product,[e.target.name]:Number(e.target.value)})}}               
+                        />
+                        
+                    </div>
+
+
                     <div className='mb-3'>
                         <label htmlFor='name' className='form-label'>
                             Name of Product

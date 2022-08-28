@@ -14,6 +14,7 @@ import { ViewUserItem } from './pages/PersonalItem';
 import { UserTest } from './App';
 import {AddUser} from './pages/AddUser';
 import { AddItem } from './pages/AddItem';
+import { EditItem } from './pages/EditItem';
 import  Login  from './pages/Login';
 import { PictureUpdate } from './components/Update Product Picture';
 
@@ -28,7 +29,8 @@ root.render(
             <Route path="/HomePage" element={<HomePage/>}/>
             <Route path="/SignUp" element={<Signup/>}/>
             <Route path="/UserProfile" element={<UserProfile/>}/>
-            <Route path="/ItemEditor" element={<AddItem/>}/>
+            <Route path="/ItemCreator" element={<AddItem/>}/>
+            <Route path="/ItemEditor" element={<EditItem/>}/>
             <Route path="/ItemEditor/Picture" element={<PictureUpdate/>}/>
             <Route path="/ProductPage" element={<ProductPage/>}/>
             <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>

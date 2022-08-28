@@ -1,35 +1,34 @@
 import './../App.css';
 import React from 'react';
 import {useRef} from 'react';
-import { Link } from 'react-router-dom';
+import {Nav} from "../components/navbar"
 
 // https://stackoverflow.com/questions/41453224/uploading-a-file-with-reactjs-and-dealing-with-c-fakepath-file
 // thank you Shafie Mukhre
 // by Tommy Hai
 
-export function PictureUpdate(props){    
+export function PictureUpdate(){    
   const [file,setFile]=React.useState(null);
   const [response,setResponse]=React.useState('');
   const inputRef = useRef()
 
   const [Productid,setProductid]=React.useState(0);
-  const productid=props.productid;
+  const accountid=1;
 
-  let apiurl = 'http://localhost:8080/product/update/picture?id='+Productid;
+  let apiurl = 'http://localhost:8080/product/update/picture?id='+Productid+'&accountid='+accountid;
  
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(file);
-    createPost(file);
+    createPost();
   }
-
-  function createPost(upload){
+  function createPost(){
     var axios = require('axios');
-    var data = upload;
+    var data = file;
     
     var config = {
       method: 'post',
-      url: apiurl,
+      url: 'http://localhost:8080/product/update/picture?id='+Productid,
       headers: { 
         'Content-Type': 'image/png' 
       },
@@ -49,17 +48,16 @@ export function PictureUpdate(props){
 
   return(
     <React.Fragment>
-      {/* {<Nav/>} */}
+      {<Nav/>}
       <h1>Upload Picture</h1>
       <form onSubmit={(e)=>{handleSubmit(e)}} method="POST" encType="multipart/form-data">
           <label htmlFor="productid">productid</label>
-          <input type="number" id="productid" name="productid" value={productid?0:productid} onChange={(e)=>{setProductid(e.target.value)}}/>
+          <input type="text" id="productid" name="productid" onChange={(e)=>{setProductid(e.target.value)}}/>
           <br/>
           <label htmlFor="file">Select file</label>
           <input type="file" id="file" accept="image/png" onChange={() => setFile(inputRef.current.files[0])} ref={inputRef}/>
           <br/>
           <input type="submit" value="Submit File"/>
-          <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Cancel</Link>  
           <br/>
       </form>
       <p>{response}</p>
