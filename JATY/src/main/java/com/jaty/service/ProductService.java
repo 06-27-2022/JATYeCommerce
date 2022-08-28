@@ -230,7 +230,7 @@ public class ProductService {
 			//Retrieve product for purchase, account of buyer, and the buyer's wallet
 			Product purchase = getProductById(id);
 			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
-			if(buyerWallet.getBalance()<purchase.getPrice() && purchase.getStock() < 0) {
+			if(buyerWallet.getBalance()<purchase.getPrice() || purchase.getStock() < 0) {
 				//If buyer balance or purchase is out of stock then no further logic is done
 				//This can be broken down to give more details to client
 				return "cannot-afford-product-or-out-of-stock";
