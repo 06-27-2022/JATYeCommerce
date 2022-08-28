@@ -12,10 +12,7 @@ export function ViewUserItem() {
     //copy pasted from postman
     function createPost(){
         var axios = require('axios');
-        var data = JSON.stringify({
-        "id": 1,
-        });
-
+        var data = '';
         var config = {
 		method: 'post',
 		url: 'http://localhost:8080/product/search/myaccount',

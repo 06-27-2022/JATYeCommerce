@@ -1,4 +1,5 @@
 import React from "react";
+import { PurchaseProduct } from "./Purchase Product";
 
 //in App.css
 //table, th, td {border: 1px solid;}
@@ -19,6 +20,7 @@ export function DisplayProduct(props){
             <th>Seller</th>
             <th>price</th>
             <th>stock</th>
+            <th>purchase</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +35,7 @@ export function DisplayProduct(props){
               <td>{p.accountId.username}</td>
               <td>{p.price}</td>                    
               <td>{p.stock}</td>                    
+              <td><PurchaseProduct productid={p.id} notifyParent={() => this.forceUpdate()}/></td>                    
             </tr>
           ))}
         </tbody>
