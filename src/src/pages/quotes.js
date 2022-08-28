@@ -16,83 +16,83 @@ import { Sponsors } from '../App';
  * 
  */
 
-const allPosts = 'https://jsonplaceholder.typicode.com/posts'; //endpoint for getting all data
+// const allPosts = 'https://jsonplaceholder.typicode.com/posts'; //endpoint for getting all data
 
-export function GetSponsors() {
-    const [post,setPost] = React.useState([]);
+// export function GetSponsors() {
+//     const [post,setPost] = React.useState([]);
 
-    //hooks allow you to use state inside of function components
-    React.useEffect(() => {
-        axios.get(allPosts).then((response) => {
-            setPost(response.data);
-        });
-    }, []);
+//     //hooks allow you to use state inside of function components
+//     React.useEffect(() => {
+//         axios.get(allPosts).then((response) => {
+//             setPost(response.data);
+//         });
+//     }, []);
 
-    if(!post) return "no quotes";
+//     if(!post) return "no quotes";
 
-    return (
-        <div>
-            {post.map((p) => (
-           <div key={p.id}>
-           <p>Quote #: {p.id}</p>
-           <p>From sponsor#: {p.userId}</p>
-           <p>Title: {p.title}</p>
-           <p>Inspirational Quote: {p.body}</p>
-           </div>
-            ))}
-        </div>
-    );
-}
-
-
-export function AddPosts() {
-    const [post, setPost] = React.useState(null);
-    const [title, setTitle] = React.useState('');
-    const [body, setBody] = React.useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        createPost(title, body);
-    }
+//     return (
+//         <div>
+//             {post.map((p) => (
+//            <div key={p.id}>
+//            <p>Quote #: {p.id}</p>
+//            <p>From sponsor#: {p.userId}</p>
+//            <p>Title: {p.title}</p>
+//            <p>Inspirational Quote: {p.body}</p>
+//            </div>
+//             ))}
+//         </div>
+//     );
+// }
 
 
-    React.useEffect(() => {
-        axios.get(`${allPosts}/`).then((response) => {
-            setPost(response.data);
-            setTitle('');
-            setBody('');
-        });
-    }, []);
+// export function AddPosts() {
+//     const [post, setPost] = React.useState(null);
+//     const [title, setTitle] = React.useState('');
+//     const [body, setBody] = React.useState('');
 
-    function createPost() {
-        axios.post(allPosts, {
-            title: title,
-            body: body
-        })
-        .then((response) => {
-            setPost(response.data)
-            console.log(response.data);
-        });
-    }
+//     const handleSubmit = (e) => {
+//         e.preventDefault();
+//         createPost(title, body);
+//     }
 
-    if(!post) return "no post requested";
 
-    return (
-        <div>
-            <form onSubmit={(e) => {handleSubmit(e)}}>
-                <div>
-                    <label htmlFor="title">Quote title: </label>
-                    <input id="title" name="title" onChange={(e) => setTitle(e.target.value)}/>
-                    <br/>
-                    <label htmlFor="body">Enter Quote: </label>
-                    <input id="body" name="body" onChange={(e) => setBody(e.target.value)}/>
-                </div>
-                <button type="submit">Add Quote</button>
-            </form>
-        </div>
-    );
+//     React.useEffect(() => {
+//         axios.get(`${allPosts}/`).then((response) => {
+//             setPost(response.data);
+//             setTitle('');
+//             setBody('');
+//         });
+//     }, []);
 
-}
+//     function createPost() {
+//         axios.post(allPosts, {
+//             title: title,
+//             body: body
+//         })
+//         .then((response) => {
+//             setPost(response.data)
+//             console.log(response.data);
+//         });
+//     }
+
+//     if(!post) return "no post requested";
+
+//     return (
+//         <div>
+//             <form onSubmit={(e) => {handleSubmit(e)}}>
+//                 <div>
+//                     <label htmlFor="title">Quote title: </label>
+//                     <input id="title" name="title" onChange={(e) => setTitle(e.target.value)}/>
+//                     <br/>
+//                     <label htmlFor="body">Enter Quote: </label>
+//                     <input id="body" name="body" onChange={(e) => setBody(e.target.value)}/>
+//                 </div>
+//                 <button type="submit">Add Quote</button>
+//             </form>
+//         </div>
+//     );
+
+// }
 
 /**
  * Controlled and uncontrolled components: 
@@ -107,3 +107,82 @@ export function AddPosts() {
  * 
  */
 
+
+
+
+//                                                                                          // Hypothetical code
+
+ const allPosts2 = 'https://localhost:8080/account/listall'; //endpoint for getting all data
+
+ export function GetUser() {
+     const [post,setPost] = React.useState([]);
+ 
+     React.useEffect(() => {
+         axios.get(allPosts2).then((response) => {
+             setPost(response.data);
+         });
+     }, []);
+ 
+     if(!post) return "no users";
+ 
+     return (
+         <div>
+             {post.map((p) => (
+            <div key={p.username}>
+            <p>Username: {p.username}</p>
+            <p>Password: {p.password}</p>
+            </div>
+             ))}
+         </div>
+     );
+ }
+ 
+ 
+ export function AddUsers() {
+     const [post, setPost] = React.useState(null);
+     const [username, setUsername] = React.useState('');
+     const [password, setPassword] = React.useState('');
+ 
+     const handleSubmit = (e) => {
+         e.preventDefault();
+         createUser(username, password);
+     }
+ 
+ 
+     React.useEffect(() => {
+         axios.get(`${allPosts2}/`).then((response) => {
+             setPost(response.data);
+             setUsername('');
+             setPassword('');
+         });
+     }, []);
+ 
+     function createUser() {
+         axios.post(allPosts2, {
+             username: username,
+             password: password
+         })
+         .then((response) => {
+             setPost(response.data)
+             console.log(response.data);
+         });
+     }
+ 
+     if(!post) return "no post requested";
+ 
+     return (
+         <div>
+             <form onSubmit={(e) => {handleSubmit(e)}}>
+                 <div>
+                     <label htmlFor="title">Username: </label>
+                     <input id="title" name="title" onChange={(e) => setUsername(e.target.value)}/>
+                     <br/>
+                     <label htmlFor="body">Password: </label>
+                     <input id="body" name="body" onChange={(e) => setPassword(e.target.value)}/>
+                 </div>
+                 <button type="submit">Sign Up</button>
+             </form>
+         </div>
+     );
+ 
+ }

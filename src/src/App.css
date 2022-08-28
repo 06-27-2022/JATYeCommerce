@@ -41,3 +41,7 @@
     text-align: center;
     text-indent: 100px;
 }
+
+table, th, td {
+  border: 1px solid;
+}

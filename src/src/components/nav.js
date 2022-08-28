@@ -6,11 +6,11 @@ export function Nav() {
     return (
         <nav>
             <div>
-                <Link to="/">Home</Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapseable"></button>
+                {/* <Link to="/">Login</Link> */}
+                {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapseable"></button> */}
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <Link to="/Login">Login</Link>
+                        <Link to="/HomePage">Home</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/SignUp">Sign Up</Link>
@@ -22,13 +22,22 @@ export function Nav() {
                         <Link to="/ItemEditor">Edit Item</Link>
                     </li>
                     <li className="nav-item">
+                        <Link to="/ItemEditor/Picture">Edit Item Picture</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link to="/ProductPage">View Item</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/PersonalItemPage">Your Items</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/sponsors">Sponsors</Link>
+                        <Link to="/UserTest">User Test</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/ViewReviews">View Product Reviews</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="AddReview">Write Product Review</Link>
                     </li>
                 </ul>
             </div>
