@@ -1,8 +1,7 @@
 import './../App.css';
 import React from 'react';
 import {useRef} from 'react';
-// import {Nav} from "../components/navbar"
-import { Link,useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // https://stackoverflow.com/questions/41453224/uploading-a-file-with-reactjs-and-dealing-with-c-fakepath-file
 // thank you Shafie Mukhre

@@ -6,13 +6,11 @@ import { DisplayProduct } from './../components/Display Product';
 export function ViewAllProducts(){
   const [post,setPost]=React.useState([]);
 
-  const apiurl='http://localhost:8080/product/search/productname?productname=';
-
   useEffect(() => {
     createPost();
     }, []);
 
-  function createPost(url){
+  function createPost(){
     var axios = require('axios');
 
     var config = {

@@ -1,13 +1,39 @@
 import './../App.css';
 import React from 'react';
+import { useEffect } from 'react';
 import { DisplayProduct } from './Display Product';
 
 export function ViewProductsByTags(){
   const [post,setPost]=React.useState([]);
   const [tagnames]=React.useState(new Set());
+  const [alltags,setAlltags]=React.useState([]);
 
+  //get all tags on startup
+  useEffect(() => {
+    const fetchBusiness=()=>{
+      var axios = require('axios');
+      var data = '';
+  
+      var config = {
+          method: 'get',
+          url: 'http://localhost:8080/tag/search/all',
+          headers: { },
+          data : data
+      };
+      axios(config)
+      .then(function (response) {
+          setAlltags(response.data);
+          console.log(alltags);
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
+    };      
+    fetchBusiness();
+    }, [alltags]);
+
+  //post request for searching products by tags
   const apiurl='http://localhost:8080/product/search/tagnames?tagnames=';
-
   function createPost(apiurl){
     var axios = require('axios');
     var config = {
@@ -36,10 +62,12 @@ export function ViewProductsByTags(){
     <React.Fragment>
         <form onSubmit={(e)=>handleSubmit(e)}>
         <p>Tag Names</p>
-        <input type="checkbox" id="tag1" onChange={(e)=>{tagnames.has("tag1")?tagnames.delete("tag1"):tagnames.add("tag1")}}/>
-        <label htmlFor="tag1"> tag1</label><br/>
-        <input type="checkbox" id="tag6" onChange={(e)=>{tagnames.has("tag6")?tagnames.delete("tag6"):tagnames.add("tag6")}}/>
-        <label htmlFor="tag6"> tag6</label><br/>
+        {alltags.map((t)=>(
+          <React.Fragment key={t.id}>
+            <input type="checkbox" id={t.tag} onChange={(e)=>{tagnames.has(t.tag)?tagnames.delete(t.tag):tagnames.add(t.tag)}}/>
+            <label htmlFor={t.tag}> {t.tag}</label><br/>
+          </React.Fragment>
+        ))}
         <button type='submit'>Submit</button>
         </form>
         <DisplayProduct post={post} />
@@ -47,27 +75,5 @@ export function ViewProductsByTags(){
   );
 }
 
-// function View(){
-//   const AllTags=()=>{
-//     var axios = require('axios');
-//     var config = {
-//       method: 'get',
-//       url: 'http://localhost:8080/tag/search/all',
-//     };
-//     axios(config)
-//     .then(function (response) {
-//       console.log(response.data);
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-//   }
-//   const SelectTags=()=>{
-//     return(
-//       <React.Fragment>
-//       </React.Fragment>
-//     );
-//   }  
-// }
 
 

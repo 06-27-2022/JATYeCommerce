@@ -86,9 +86,9 @@ function View() {           //Find method to pull Item info to page (preferably 
 
 
 
-function ProductPageFunction() {
-  return(<p>This is the Product page</p>);
-}
+// function ProductPageFunction() {
+//   return(<p>This is the Product page</p>);
+// }
 
 
 // function PersonalItemFunction() {

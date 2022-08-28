@@ -53,8 +53,8 @@ export function ViewUser() {
 
                         <tbody>
                             {users.map((user) => (
-                                <tr>
-                                    <th scope="row" key={user.id}>{user.id}</th>
+                                <tr key={user.id}>
+                                    <th scope="row" >{user.id}</th>
                                     {/* <td>{user.id}</td> */}
                                     <td>{user.username}</td>
                                     {/* <td>{user.password}</td> */}
