@@ -22,6 +22,9 @@ export function Nav() {
                         <Link to="/ItemEditor">Edit Item</Link>
                     </li>
                     <li className="nav-item">
+                        <Link to="/ItemEditor/Picture">Edit Item Picture</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link to="/ProductPage">View Item</Link>
                     </li>
                     <li className="nav-item">

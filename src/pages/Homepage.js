@@ -12,7 +12,7 @@ export function HomePage(){
     function Search(){
         if(search===option[0])
             return <ViewProductsByName/>
-        if(search===option[1])
+        else if(search===option[1])
             return <ViewProductsByTags/>
     }
     

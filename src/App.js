@@ -6,6 +6,7 @@ import { AddUser } from './pages/AddUser';
 import { AddItem } from './pages/AddItem';
 import  Login  from './pages/Login';
 import { ViewUser } from './pages/UserProfile';
+import { ViewUserItem } from './pages/PersonalItem';
 
 class item {
   constructor(name, url){
@@ -89,9 +90,9 @@ function ProductPageFunction() {
 }
 
 
-function PersonalItemFunction() {
-  return(<p>This is the Your Items page</p>);
-}
+// function PersonalItemFunction() {
+//   return(<p>This is the Your Items page</p>);
+// }
 
 
 //Should launch homepage/View function on start page (see nav.js) 
@@ -162,7 +163,8 @@ export function PersonalItemPage(){
   return (
     <div>
       <Nav/>
-   <PersonalItemFunction/>
+   {/* <PersonalItemFunction/> */}
+      <ViewUserItem/>
     </div>
   );
 }
