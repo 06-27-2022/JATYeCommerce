@@ -2,6 +2,7 @@ import './../App.css';
 import React from 'react';
 import {useRef} from 'react';
 // import {Nav} from "../components/navbar"
+import { Link,useNavigate } from 'react-router-dom';
 
 // https://stackoverflow.com/questions/41453224/uploading-a-file-with-reactjs-and-dealing-with-c-fakepath-file
 // thank you Shafie Mukhre
@@ -58,6 +59,7 @@ export function PictureUpdate(){
           <input type="file" id="file" accept="image/png" onChange={() => setFile(inputRef.current.files[0])} ref={inputRef}/>
           <br/>
           <input type="submit" value="Submit File"/>
+          <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Cancel</Link>  
           <br/>
       </form>
       <p>{response}</p>

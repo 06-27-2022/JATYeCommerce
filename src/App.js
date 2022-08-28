@@ -7,6 +7,7 @@ import { AddItem } from './pages/AddItem';
 import  Login  from './pages/Login';
 import { ViewUser } from './pages/UserProfile';
 import { ViewUserItem } from './pages/PersonalItem';
+import { ViewAllProducts } from './pages/AllItems';
 
 class item {
   constructor(name, url){
@@ -153,7 +154,8 @@ export function ProductPage(){
   return (
     <div>
       <Nav/>
-    <ProductPageFunction/>  
+    {/* <ProductPageFunction/>   */}
+    <ViewAllProducts/>
     </div>
   );
 }

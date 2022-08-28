@@ -9,7 +9,7 @@ export function DisplayProduct(props){
 
     return(
     <React.Fragment>
-      <table>
+      <table className="table border shadow">
         <thead>
           <tr>
             <th>Picture</th>

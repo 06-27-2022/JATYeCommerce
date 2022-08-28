@@ -1,5 +1,6 @@
 // import axios from 'axios';
 import React, { useEffect,useState } from 'react'
+import { DisplayProduct } from './../components/Display Product';
 
 export function ViewUserItem() {
     const [userItem, setUserItem] = useState([])
@@ -38,7 +39,8 @@ export function ViewUserItem() {
     <div className='main'>
     <div className='container'>
     <div className='py-4'>
-        <table className="table border shadow">
+        <DisplayProduct post={userItem}/>
+        {/* <table className="table border shadow">
             <tbody>
                 {userItem.map((Item) => (
                     <tr>
@@ -51,7 +53,7 @@ export function ViewUserItem() {
                 ))
                 }
             </tbody>
-        </table>
+        </table> */}
     </div>
     </div>
     </div>
