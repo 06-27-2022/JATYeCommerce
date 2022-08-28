@@ -22,6 +22,7 @@ import com.jaty.service.TagService;
  */
 @RestController("jatyTagController")
 @RequestMapping(path="/tag")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 public class TagController {
 	@Autowired
 	TagService tagService;

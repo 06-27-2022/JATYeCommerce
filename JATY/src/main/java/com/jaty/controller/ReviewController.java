@@ -18,6 +18,7 @@ import com.jaty.service.ReviewService;
 
 @RestController("jatyReviewController")
 @RequestMapping(path="/review")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 public class ReviewController {
 	@Autowired
 	ReviewService reviewService;

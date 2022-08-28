@@ -25,6 +25,7 @@ import com.jaty.service.ProductService;
  */
 @RestController("jatyProductController")
 @RequestMapping(path="/product")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 public class ProductController {
 
 	@Autowired
