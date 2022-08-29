@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -33,6 +34,12 @@ export function Nav() {
                     <li className="nav-item">
                         <Link to="/PersonalItemPage">Your Items</Link>
                     </li>
+			  <li className="nav-item">
+                        <Link to="/ViewReviews">View Product Reviews</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/AddReview">Write Product Review</Link>
+                    </li>
                     {/* <li className="nav-item">
                         <Link to="/UserTest">User Test</Link>
                     </li> */}
@@ -41,4 +48,5 @@ export function Nav() {
         </nav>
     );
 }
+
 

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
@@ -17,6 +18,9 @@ import { AddItem } from './pages/AddItem';
 import { EditItem } from './pages/EditItem';
 import  Login  from './pages/Login';
 import { PictureUpdate } from './components/Update Product Picture';
+import { GetReviews, ReviewProduct } from './pages/Review';
+import { ChangeBalance } from './pages/AdjustWalletFunds';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -34,10 +38,15 @@ root.render(
             <Route path="/ItemEditor/Picture" element={<PictureUpdate/>}/>
             <Route path="/ProductPage" element={<ProductPage/>}/>
             <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>
+		<Route path="/UserTest" element={<UserTest/>}/>
+            <Route path="/AddReview" element={<ReviewProduct/>}/>
+            <Route path="/ViewReviews" element={<GetReviews/>}/>
+            <Route path="/AdjustBalance" element={<ChangeBalance/>}/>
             {/* <Route path="/PersonalItemPage" element={<ViewUserItem/>}/> */}
             {/* <Route path="/UserTest" element={<UserTest/>}/> */}
             {/* <Route path="/findall" element={<AddUser/>}/> */}
             </Routes>
             </BrowserRouter>
     </div>
+
 )
