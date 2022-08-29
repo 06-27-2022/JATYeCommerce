@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-// import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 export function ViewUser() {
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState(null)
 
     useEffect(() => {
-        loadUsers();
+        loadUser();
     }, []);
 
-    const loadUsers = async () => {
+    const loadUser = async () => {
         //original
         // const result = await axios.get("http://localhost:8080/account/listall")
         // setUsers(result.data);
@@ -19,22 +19,22 @@ export function ViewUser() {
 
         var config = {
           method: 'get',
-          url: 'http://localhost:8080/account/listall',
-          headers: { }
+          url: 'http://localhost:8080/wallet/account',
+          withCredentials:true
         };
         
         axios(config)
         .then(function (response) {
-          console.log(JSON.stringify(response.data));
             //you have to add setUsers yourself since postman only console.logs the response by default
             setUsers(response.data);
+            console.log(response.data);
         })
         .catch(function (error) {
           console.log(error);
         });    
     };
 
-
+    if (users==null) return(<p>Loading</p>);
     return (
         <div className='main'>
             <div className='container'>
@@ -42,30 +42,25 @@ export function ViewUser() {
                     <table className="table border shadow">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">City of Residence</th>
                                 <th scope="col">State of Residence</th>
+                                <th scope="col">Balance</th>
 
                             </tr>
                         </thead>
-
-
                         <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id}>
-                                    <th scope="row" >{user.id}</th>
-                                    {/* <td>{user.id}</td> */}
-                                    <td>{user.username}</td>
-                                    {/* <td>{user.password}</td> */}
-                                    <td>{user.city}</td>
-                                    <td>{user.state}</td>
-                                </tr>
-                            ))
-                            }
+                               <tr>
+                                <td>{users.accountId.id}</td>
+                               <td>{users.accountId.username}</td>
+                               <td>{users.accountId.city}</td>
+                               <td>{users.accountId.state}</td>
+                               <td>{users.balance}</td>
+                               </tr>
                         </tbody>
                     </table>
-
+                    <Link to="/AdjustBalance">Adjust Balance</Link>
                 </div>
             </div>
         </div>
