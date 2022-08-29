@@ -85,6 +85,17 @@ public class ProductService {
 		return tags[0].getBan();
 	}
 
+	//removes all banned products from the list
+	private List<Product>removeBanned(List<Product>allproducts){
+		List<Product>products=new LinkedList<Product>();
+		for(Product p:allproducts) {
+			//if the product is banned, we skip to the next product
+			if(isBanned(p)) {continue;}
+			products.add(p);
+		}
+		return products;
+	}
+	
 	/**
 	 * Checks if product p contains all tags using the provided tagnames
 	 * @param p a product object
@@ -143,7 +154,8 @@ public class ProductService {
 	
 	
 	public List<Product> getProductByName(String productname){
-		return this.productRepository.findByNameStartingWithIgnoreCase(productname);
+		List<Product>allproducts=this.productRepository.findByNameStartingWithIgnoreCase(productname);
+		return removeBanned(allproducts);
 	}
 	
 	public List<Product> getProductByTagsName(List<String> tagnames) {
@@ -162,7 +174,8 @@ public class ProductService {
 	
 	
 	public List<Product> getProductByAccount(Account account) {
-		return this.productRepository.findByAccountid(account);
+		List<Product>allproducts=this.productRepository.findByAccountid(account);
+		return removeBanned(allproducts);
 	}
 
 	public String updateProduct(Product product, HttpServletRequest request) {
@@ -229,7 +242,9 @@ public class ProductService {
 		if(session != null) {
 			//Retrieve product for purchase, account of buyer, and the buyer's wallet
 			Product purchase = getProductById(id);
-			Wallet buyerWallet = this.walletRepository.findByAccountId(this.accountRepository.findById((int) session.getAttribute("accountId")));
+			Account buyer=this.accountRepository.findById((int) session.getAttribute("accountId"));
+			if(purchase.getAccountId().getId()==buyer.getId())return "you-own-this-product";
+			Wallet buyerWallet = this.walletRepository.findByAccountId(buyer);
 			if(buyerWallet==null)return "no-buyer-wallet";
 			if(buyerWallet.getBalance()<purchase.getPrice() || purchase.getStock() <= 0) {
 				//If buyer balance or purchase is out of stock then no further logic is done

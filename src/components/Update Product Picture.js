@@ -59,7 +59,7 @@ export function PictureUpdate(props){
           <input type="file" id="file" accept="image/png" onChange={() => setFile(inputRef.current.files[0])} ref={inputRef}/>
           <br/>
           <input type="submit" value="Submit File"/>
-          <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Cancel</Link>  
+          <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Go To Home</Link>  
           <br/>
       </form>
       <p>{response}</p>
