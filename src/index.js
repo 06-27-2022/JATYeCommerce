@@ -38,7 +38,6 @@ root.render(
             <Route path="/ItemEditor/Picture" element={<PictureUpdate/>}/>
             <Route path="/ProductPage" element={<ProductPage/>}/>
             <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>
-		<Route path="/UserTest" element={<UserTest/>}/>
             <Route path="/AddReview" element={<ReviewProduct/>}/>
             <Route path="/ViewReviews" element={<GetReviews/>}/>
             <Route path="/AdjustBalance" element={<ChangeBalance/>}/>
