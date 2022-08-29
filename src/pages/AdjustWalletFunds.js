@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export function ChangeBalance(){
     const [input, setInput]=React.useState('');
@@ -30,6 +31,7 @@ export function ChangeBalance(){
                     <input id="input" name="input" onChange={(e)=>setInput(e.target.value)}/>
                 </div>
                 <button type="submit">Submit Review</button>
+                <Link type='submit' className='btn btn-outline-danger mx-2' to="/HomePage">Cancel</Link>
             </form>
         </div>
     )
