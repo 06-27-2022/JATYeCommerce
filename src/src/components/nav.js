@@ -37,7 +37,7 @@ export function Nav() {
                         <Link to="/ViewReviews">View Product Reviews</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="AddReview">Write Product Review</Link>
+                        <Link to="/AddReview">Write Product Review</Link>
                     </li>
                 </ul>
             </div>

@@ -17,6 +17,7 @@ import { AddItem } from './pages/AddItem';
 import  Login  from './pages/Login';
 import { PictureUpdate } from './components/Update Product Picture';
 import { GetReviews, ReviewProduct } from './pages/Review';
+import { ChangeBalance } from './pages/AdjustWalletFunds';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -35,8 +36,9 @@ root.render(
             <Route path="/PersonalItemPage" element={<PersonalItemPage/>}/>
             {/* <Route path="/PersonalItemPage" element={<ViewUserItem/>}/> */}
             <Route path="/UserTest" element={<UserTest/>}/>
-            <Route path="/AddReview" element={<ReviewProduct />}/>
+            <Route path="/AddReview" element={<ReviewProduct/>}/>
             <Route path="/ViewReviews" element={<GetReviews/>}/>
+            <Route path="/AdjustBalance" element={<ChangeBalance/>}/>
             {/* <Route path="/findall" element={<AddUser/>}/> */}
             </Routes>
             </BrowserRouter>
