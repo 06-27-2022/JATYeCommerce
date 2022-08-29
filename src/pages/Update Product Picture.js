@@ -40,6 +40,7 @@ export function PictureUpdate(){
     .then(function (response) {
       console.log(JSON.stringify(response.data));
       setResponse(response.data);
+      window.location.href="/HomePage";
     })
     .catch(function (error) {
       console.log(error);
